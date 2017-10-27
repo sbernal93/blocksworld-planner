@@ -18,7 +18,7 @@ public class InputLoader {
 	 * 					List of {@link Predicate}, the rest are calculated by the algorithm
 	 * @return
 	 */
-	public static Map<String, Object> loadInput() {
+	public static Map<String, Object> loadInput(String filepath) {
 		//TODO
 		return null;
 	}

@@ -15,6 +15,7 @@ import model.Planner;
 import model.Predicate;
 import model.State;
 
+
 public class BlockWorldController {
 
 	private List<Block> blocks;
@@ -28,9 +29,9 @@ public class BlockWorldController {
 	private Planner planner;
 	
 	@SuppressWarnings("unchecked")
-	public void loadBlockWorld(){
+	public void loadBlockWorld(String filepath){
 		operators = OperatorLoader.loadOperators();
-		Map<String, Object> inputMap = InputLoader.loadInput();
+		Map<String, Object> inputMap = InputLoader.loadInput(filepath);
 		blocks = (List<Block>) inputMap.get("Blocks");
 		maxColumns = (int) inputMap.get("MaxColumns");
 		initialState = (State) inputMap.get("InitialState");
