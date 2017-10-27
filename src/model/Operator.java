@@ -8,20 +8,20 @@ public class Operator {
 	private List<Predicate> preconditions;
 	private List<Predicate> addList;
 	private List<Predicate> delList;
-	private int paramAmount;
+	private List<Block> paramList;
 	
 	public Operator() {
 		super();
 	}
 
 	public Operator(OperatorName name, List<Predicate> preconditions, List<Predicate> addList,
-			List<Predicate> delList, int paramAmount) {
+			List<Predicate> delList, List<Block> paramList) {
 		super();
 		this.name = name;
 		this.preconditions = preconditions;
 		this.addList = addList;
 		this.delList = delList;
-		this.paramAmount = paramAmount;
+		this.paramList = paramList;
 	}
 
 	public OperatorName getName() {
@@ -55,14 +55,13 @@ public class Operator {
 	public void setDelList(List<Predicate> delList) {
 		this.delList = delList;
 	}
-	
-	
-	public int getParamAmount() {
-		return paramAmount;
+
+	public List<Block> getParamList() {
+		return paramList;
 	}
 
-	public void setParamAmount(int paramAmount) {
-		this.paramAmount = paramAmount;
+	public void setParamList(List<Block> paramList) {
+		this.paramList = paramList;
 	}
 
 	public void addPredicateToAddList(Predicate predicate) {
@@ -85,4 +84,14 @@ public class Operator {
 		}
 		this.preconditions.add(predicate);
 	}
+
+	@Override
+	public String toString() {
+		if(this.paramList.size() == 1) {
+			return this.name + "(" + this.paramList.get(0) + ")";
+		}
+		return this.name + "(" + this.paramList.get(0).getName() + ", " + this.paramList.get(1).getName() + ")";
+	}
+	
+	
 }

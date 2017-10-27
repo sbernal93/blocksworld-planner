@@ -33,6 +33,12 @@ public class Predicate {
 		return "Predicate [" + name+ "(" + blocks+ ")]";
 	}
 	
-	
+	public boolean equalPredicate(Predicate otherPredicate) {
+		if(otherPredicate.getName().equals(this.name) &&
+				otherPredicate.getVariables().get(0).getName().equals(this.getVariables().get(0).getName())){
+			return true;
+		}
+		return false;
+	}
 
 }

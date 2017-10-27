@@ -6,14 +6,18 @@ public class State {
 	
 	private List<Predicate> predicates;
 	private Operator operatorUsedToReachState;
+	private boolean isValid;
+	private String reasonForInvalidState;
 
 	public State() {
 		super();
+		this.isValid = true;
 	}
 
 	public State(List<Predicate> predicates) {
 		super();
 		this.predicates = predicates;
+		this.isValid = true;
 	}
 
 	public List<Predicate> getPredicates() {
@@ -30,6 +34,22 @@ public class State {
 
 	public void setOperatorUsedToReachState(Operator operatorUsedToReachState) {
 		this.operatorUsedToReachState = operatorUsedToReachState;
+	}
+
+	public boolean isValid() {
+		return isValid;
+	}
+
+	public void setValid(boolean isValid) {
+		this.isValid = isValid;
+	}
+
+	public String getReasonForInvalidState() {
+		return reasonForInvalidState;
+	}
+
+	public void setReasonForInvalidState(String reasonForInvalidState) {
+		this.reasonForInvalidState = reasonForInvalidState;
 	}
 
 	public boolean areEqualStates(State otherState) {

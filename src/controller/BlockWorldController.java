@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import model.Block;
 import model.InputLoader;
@@ -141,20 +142,44 @@ public class BlockWorldController {
 	 * @return
 	 */
 	private State stateFoundAfterOperator(State state, Operator operator, Predicate predicate) {
+		Predicate addPredicateFromOperator;
 		State stateFound = new State();
-		stateFound.setOperatorUsedToReachState(operator);
-		//TODO: apply operator
+		//stateFound.setOperatorUsedToReachState(operator);
 		List<Predicate> predicates = state.getPredicates();
-		List<Predicate> preconditionsToAdd = new ArrayList<>();
-		/*for(Predicate precondition : operator.getPreconditions()) {
-			List<Block> blocks = new ArrayList<>();
-			if(precondition.getVariables().size() == predicate.getVariables().size()) {
-				blocks = predicate.getVariables();
+		Operator operatorWithBlocks = new Operator();
+		if(operator.getParamList().size() == predicate.getVariables().size()) {
+			//Tries to find the operator so that the add list element matches the predicate blocks
+			if(operator.getParamList().size() == 2) {
+				operatorWithBlocks = OperatorLoader.load(operator.getName(), predicate.getVariables().get(0).getName(), predicate.getVariables().get(1).getName());
+				addPredicateFromOperator = operatorWithBlocks.getAddList().stream().filter(p -> p.getName().equals(predicate.getName())).findAny().orElse(null);
+				if(!addPredicateFromOperator.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName())) {
+					operatorWithBlocks = OperatorLoader.load(operator.getName(), predicate.getVariables().get(1).getName(), predicate.getVariables().get(0).getName());
+					addPredicateFromOperator = operatorWithBlocks.getAddList().stream().filter(p -> p.getName().equals(predicate.getName())).findAny().orElse(null);
+				}
 			} else {
-				
+				operatorWithBlocks = OperatorLoader.load(operator.getName(), predicate.getVariables().get(0).getName(), "");
 			}
-
-		}*/
+		}
+		//Java 8 magic, finds if any of the predicates in the del list of the operator
+		//matches any of the predicates in the current state (if so this state is invalid)
+		List<Predicate> found = operator.getDelList().parallelStream()
+				 .filter( operatorDelPredicate->{
+				     return state.getPredicates()
+				       .parallelStream()
+				       .anyMatch( statePredicate->operatorDelPredicate.equalPredicate(statePredicate) ); 
+				     }
+				   )
+				  .collect(Collectors.toList());
+		if(found.size()>0) {
+			stateFound.setValid(false);
+			stateFound.setReasonForInvalidState("After applying operator: [" + operator.toString() + "] "
+					+ " predicate: [" + found.get(0).toString() + "] would have been removed");
+		}
+		//TODO: diferent param and predicate variables amount, needs to use conditional param 
+		predicates.addAll(operatorWithBlocks.getPreconditions());
+		stateFound.setOperatorUsedToReachState(operatorWithBlocks);
+		//TODO: predicates should be purged so that they dont repeat
+		stateFound.setPredicates(predicates);
 		return state;
 	}
 	

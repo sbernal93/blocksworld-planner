@@ -5,6 +5,24 @@ import java.util.List;
 
 public class OperatorLoader {
 	
+	public static Operator load(OperatorName name, String x, String y) {
+		switch (name) {
+		case LEAVE:
+			return loadLeave(x);
+		case PICK_UP:
+			return loadPickUp(x);
+		case PICKUP_LEFT:
+			return loadPickUpLeft(x);
+		case STACK:
+			return loadStack(x, y);
+		case UNSTACK:
+			return loadUnStack(x, y);
+		case UNSTACK_LEFT:
+			return loadUnStackLeft(x, y);
+		}
+		return null;
+	}
+	
 	public static List<Operator> loadOperators(){
 		List<Operator> operators = new ArrayList<>();
 		
@@ -47,7 +65,7 @@ public class OperatorLoader {
 		
 		addList.add(new Predicate(PredicateName.EMPTY_ARM, null));
 		
-		return new Operator(OperatorName.STACK, preconditions, addList, delList, 2);
+		return new Operator(OperatorName.STACK, preconditions, addList, delList, blockList);
 		
 	}
 	
@@ -78,7 +96,7 @@ public class OperatorLoader {
 		preconditions.add(new Predicate(PredicateName.ON, blockList));
 		
 		
-		return new Operator(OperatorName.UNSTACK, preconditions, addList, delList, 2);
+		return new Operator(OperatorName.UNSTACK, preconditions, addList, delList, blockList);
 	}
 	
 	public static Operator loadUnStack(String x, String y) {
@@ -114,7 +132,7 @@ public class OperatorLoader {
 		addList.add(new Predicate(PredicateName.HOLDING, blockList));
 		delList.add(new Predicate(PredicateName.ON_TABLE, blockList));
 		
-		return new Operator(OperatorName.PICK_UP, preconditions, addList, delList, 1);
+		return new Operator(OperatorName.PICK_UP, preconditions, addList, delList, blockList);
 	}
 	
 	public static Operator loadPickUp(String x) {
@@ -148,7 +166,7 @@ public class OperatorLoader {
 		
 		addList.add(new Predicate(PredicateName.EMPTY_ARM, null));
 		
-		return new Operator(OperatorName.LEAVE, preconditions, addList, delList, 1);
+		return new Operator(OperatorName.LEAVE, preconditions, addList, delList, blockList);
 		
 	}
 
