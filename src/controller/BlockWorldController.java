@@ -164,13 +164,15 @@ public class BlockWorldController {
 		//Java 8 magic, finds if any of the predicates in the del list of the operator
 		//matches any of the predicates in the current state (if so this state is invalid)
 		List<Predicate> found = operator.getDelList().parallelStream()
-				 .filter( operatorDelPredicate->{
-				     return state.getPredicates()
-				       .parallelStream()
-				       .anyMatch( statePredicate->operatorDelPredicate.equalPredicate(statePredicate) ); 
-				     }
-				   )
+				 .filter( operatorDelPredicate-> state.getPredicates()
+                   .parallelStream()
+                   .anyMatch(operatorDelPredicate::equalPredicate)
+				 )
 				  .collect(Collectors.toList());
+		/*return state.getPredicates()
+							 .parallelStream()
+							 .anyMatch(operatorDelPredicate::equalPredicate);*/
+		//.anyMatch( statePredicate->operatorDelPredicate.equalPredicate(statePredicate) );
 		if(found.size()>0) {
 			stateFound.setValid(false);
 			stateFound.setReasonForInvalidState("After applying operator: [" + operator.toString() + "] "
