@@ -1,11 +1,9 @@
 package controller;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import model.Block;
@@ -72,42 +70,52 @@ public class BlockWorldController {
 		//the last state of the plan is used to validate if we finished
 		//or to determine where to continue
 		State finalStateInList = plan.getStates().get(plan.getStates().size()-1);
+		//if the state is equal to the initial state this plan is finished
 		if(finalStateInList.areEqualStates(initialState)) {
 			plan.setCompletedPlan(true);
 			plan.setValidPlan(true);
-		}
-		if(isPossibleState(finalStateInList)) {
-			List< State> newPossibleStates = calculateNewStates(goalState);
-			boolean firstIt = true;
-			for(State possibleState : newPossibleStates) {
-				if(firstIt) {
-					//the current plan is the first to change, then we generate new plans that may be possible
-					plan.addState(possibleState);
-					firstIt = false;
-				} else {
-					//a new plan is generated exactly as the one we are calculating but
-					//with a new state resulting from a different operator
-					//this new plan is added to the planner to be processed later
-					//this plan may not be possible
-					Plan newPlan = plan.makeCopyPlan();
-					newPlan.addState(possibleState);
-					planner.addPlan(newPlan);
-				}
-			}
 		} else {
-			//the plan is invalid since we reached an impossible state
-			//the plan is completed because we cannot continue this path
-			plan.setValidPlan(false);
-			plan.setCompletedPlan(true);
+			if(isPossibleState(finalStateInList)) {
+				//List< State> newPossibleStates = calculateNewStates(goalState);
+				List< State> newPossibleStates = calculateNewStates(finalStateInList);
+				boolean firstIt = true;
+				for(State possibleState : newPossibleStates) {
+					if(firstIt) {
+						//the current plan is the first to change, then we generate new plans that may be possible
+						plan.addState(possibleState);
+						firstIt = false;
+					} else {
+						//a new plan is generated exactly as the one we are calculating but
+						//with a new state resulting from a different operator
+						//this new plan is added to the planner to be processed later
+						//this plan may not be possible
+						Plan newPlan = plan.makeCopyPlan();
+						newPlan.addState(possibleState);
+						planner.addPlan(newPlan);
+					}
+				}
+			} else {
+				//the plan is invalid since we reached an impossible state
+				//the plan is completed because we cannot continue this path
+				plan.setValidPlan(false);
+				plan.setCompletedPlan(true);
+			}
 		}
+		
 		return planner;
 	}
 	
 	
 	private boolean isPossibleState(State state) {
+		//TODO: remember that some states can already have isValid set to false previously
 		return false;
 	}
 	
+	/**
+	 * Calculates all the possible new states based on current state
+	 * @param currentState
+	 * @return
+	 */
 	private List< State> calculateNewStates(State currentState) {
 		List<Operator> operatorsFound = new ArrayList<>();
 		Map<Predicate, List<Operator>> operatorsFoundForPredicate = new HashMap<>();
