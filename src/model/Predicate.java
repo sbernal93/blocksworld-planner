@@ -38,4 +38,10 @@ public class Predicate {
 				otherPredicate.getVariables().get(0).getName().equals(this.getVariables().get(0).getName()));
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		return equalPredicate((Predicate) obj);
+	}
+
+	
 }
