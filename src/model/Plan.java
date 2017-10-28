@@ -54,7 +54,8 @@ public class Plan {
 	}
 	
 	public Plan makeCopyPlan() {
-		return null;
+		return new Plan(this.initialState, new ArrayList(this.states), true, false);
+
 	}
 	
 }
