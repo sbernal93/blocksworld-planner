@@ -10,6 +10,7 @@ import model.Block;
 import model.InputLoader;
 import model.Operator;
 import model.OperatorLoader;
+import model.OutputLoader;
 import model.Plan;
 import model.Planner;
 import model.Predicate;
@@ -60,6 +61,7 @@ public class BlockWorldController {
 			}
 			//at the end of this loop the planner object should have all the possible plans
 			//that where created, including failed ones and valid ones
+			OutputLoader.generateOutput(planner);
 		}
 	}
 	

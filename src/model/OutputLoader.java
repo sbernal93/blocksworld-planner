@@ -11,7 +11,7 @@ import java.util.StringJoiner;
 
 public class OutputLoader {
 
-	public void generateOutput(Planner planner) {
+	public static void generateOutput(Planner planner) {
 		try {
 			StringJoiner operatorJoiner = new StringJoiner(",");
 			for(State state : planner.getCompletedPlan().getStates()) {
@@ -35,9 +35,10 @@ public class OutputLoader {
 					lines.add("------------------------------------------------------------");
  				}
 			}
-			
-			Path file = Paths.get("par-activity-output" + Calendar.getInstance().getTimeInMillis() + ".txt");
+			String fileName = "par-activity-output" + Calendar.getInstance().getTimeInMillis() + ".txt";
+			Path file = Paths.get(fileName);
 			Files.write(file, lines, Charset.forName("UTF-8"));
+			System.out.println("Output file is: " + fileName);
 		}catch (Exception e) {
 			System.out.println("There was an error creating output file");
 			e.printStackTrace();
