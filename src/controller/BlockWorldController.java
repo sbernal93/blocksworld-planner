@@ -276,15 +276,7 @@ public class BlockWorldController {
 		return hasContradictions;
 	}
 	
-	private boolean isMaxColumnsReached(State state) {
-		return false;
-	}
-	
 	private boolean isEqualToAnyPreviousState(State state, Plan plan) {
-		return false;
-	}
-	
-	private boolean isValidWeightOfBlocks(State state) {
 		return false;
 	}
 	
@@ -357,7 +349,16 @@ public class BlockWorldController {
 				stateFound.setReasonForInvalidState("After applying operator: [" + operator.toString() + "] "
 						+ " predicate: [" + found.get(0).toString() + "] would have been removed");
 			}
-			predicates.remove(predicate);
+			for(Predicate p : operatorWithBlocks.getAddList() ) {
+				if(predicates.stream().anyMatch(pr -> p.equals(p))) {
+					predicates.remove(p);
+				} else {
+					stateFound.setValid(false);
+					stateFound.setReasonForInvalidState("For operator: [" + operator.toString() + "] to be used"
+							+ " State needed to have: " + p);
+				}
+			}
+			//predicates.remove(predicate);
 			predicates.addAll(operatorWithBlocks.getPreconditions());
 			stateFound.setOperatorUsedToReachState(operatorWithBlocks);
 			stateFound.setPredicates(predicates);
@@ -367,6 +368,7 @@ public class BlockWorldController {
 		
 		return statesFound;
 	}
+	
 	
 	/**
 	 * Removes any repeated predicate a state may have
