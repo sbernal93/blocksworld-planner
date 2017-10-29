@@ -13,6 +13,7 @@ import model.OperatorLoader;
 import model.Plan;
 import model.Planner;
 import model.Predicate;
+import model.PredicateName;
 import model.State;
 
 
@@ -41,6 +42,7 @@ public class BlockWorldController {
 	
 	//TODO: test 
 	public void start(){
+		//TODO: goal state should be validated as well
 		planner = new Planner();
 		List< State> newPossibleStates = calculateNewStates(goalState);
 		for(State posibleState : newPossibleStates) {
@@ -75,7 +77,7 @@ public class BlockWorldController {
 			plan.setCompletedPlan(true);
 			plan.setValidPlan(true);
 		} else {
-			if(isPossibleState(finalStateInList)) {
+			if(isPossibleState(finalStateInList, plan)) {
 				//List< State> newPossibleStates = calculateNewStates(goalState);
 				List< State> newPossibleStates = calculateNewStates(finalStateInList);
 				boolean firstIt = true;
@@ -106,8 +108,187 @@ public class BlockWorldController {
 	}
 	
 	
-	private boolean isPossibleState(State state) {
-		//TODO: remember that some states can already have isValid set to false previously
+	/**
+	 * Checks if a state is valid.. cases where it can be invalid:
+	 * 	1.- two contradicting predicates (Hold and On-table, on(a,b) and on(b,a), etc
+	 * 	2.- max columns allowed passed
+	 * 	3.- if its equal to goal state
+	 *  4.- if it is equal to any previous state
+	 *  5.- Using an invalid arm for picking up block (left arm for heavy blocks)
+	 *  6.- Putting a heavier block on top of a lighter one
+	 * @param state
+	 * @return
+	 */
+	private boolean isPossibleState(State state, Plan plan) {
+		//some states can already have isValid set to false previously
+		if(state.isValid() && !hasContradictingPredicates(state)) {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Checks if any of the predicates are contradicting, sets the state isValid to false
+	 * and sets the reason for the invalid state
+	 * @param state
+	 * @return
+	 */
+	private boolean hasContradictingPredicates(State state) {
+		boolean hasContradictions = false;
+		for(Predicate predicate : state.getPredicates()) {
+			switch(predicate.getName()) {
+			/**
+			 * CLEAR(x) is invalid if: ON(y, x) or HOLDING(X) exists
+			 */
+			case CLEAR:
+				for (Predicate p: state.getPredicates()) {
+					if((p.getName().equals(PredicateName.ON) &&
+							p.getVariables().get(1).getName().equals(predicate.getVariables().get(0).getName())) || 
+					(p.getName().equals(PredicateName.HOLDING) && 
+							p.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName()))) {
+						hasContradictions = true;
+						state.setValid(false);
+						state.setReasonForInvalidState("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
+						break;
+					}
+				}
+				break;
+			/**
+			 * EMPTY_ARM(a) is invalid if: Holding(a) exists
+			 */
+			case EMPTY_ARM:
+				for (Predicate p: state.getPredicates()) {
+					if(p.getName().equals(PredicateName.HOLDING) && 
+							p.getArm().equals(predicate.getArm())) {
+						hasContradictions = true;
+						state.setValid(false);
+						state.setReasonForInvalidState("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
+						break;
+					}
+				}
+				break;
+			/**
+			 * HEAVIER(x,y) is invalid if: ON(X,Y) exists
+			 */
+			case HEAVIER:
+				for (Predicate p: state.getPredicates()) {
+					if(p.getName().equals(PredicateName.ON) && 
+							p.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName()) &&
+									p.getVariables().get(1).getName().equals(predicate.getVariables().get(1).getName())) {
+						hasContradictions = true;
+						state.setValid(false);
+						state.setReasonForInvalidState("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
+						break;
+					}
+				}
+				break;
+			/**
+			 * HOLDING(x,a) is invalid if: CLEAR(X), ON(X,Y), ON(Y,X), ON_TABLE(X) EMPTY_ARM(A) exists
+			 */
+			case HOLDING:
+				for (Predicate p: state.getPredicates()) {
+					if((p.getName().equals(PredicateName.ON) && (
+							p.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName()) &&
+									p.getVariables().get(1).getName().equals(predicate.getVariables().get(0).getName())))|| 
+						(p.getName().equals(PredicateName.CLEAR) && 
+								p.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName())) || 
+						(p.getName().equals(PredicateName.ON_TABLE) && 
+								p.getVariables().get(0).equals(predicate.getVariables().get(0))) ||
+						(p.getName().equals(PredicateName.EMPTY_ARM) && 
+								p.getArm().equals(predicate.getArm()))) {
+						hasContradictions = true;
+						state.setValid(false);
+						state.setReasonForInvalidState("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
+						break;
+					}
+				}
+				break;
+			case LIGHT_BLOCK:
+				break;
+			/**
+			 * ON(X,Y) is invalid if: HOLDING(X), HOLDING(Y), ON_TABLE(X), CLEAR(Y), HEAVIER(X,Y), ON(Z,Y),
+			 * ON(Y,X) exists
+			 */
+			case ON:
+				for (Predicate p: state.getPredicates()) {
+					if((p.getName().equals(PredicateName.ON) && (
+							p.getVariables().get(0).getName().equals(predicate.getVariables().get(1).getName()) &&
+									p.getVariables().get(1).getName().equals(predicate.getVariables().get(0).getName())))|| 
+						(p.getName().equals(PredicateName.ON) && 
+							p.getVariables().get(1).getName().equals(predicate.getVariables().get(1).getName()))||
+						(p.getName().equals(PredicateName.CLEAR) && 
+								p.getVariables().get(0).getName().equals(predicate.getVariables().get(1).getName())) || 
+						(p.getName().equals(PredicateName.ON_TABLE) && 
+								p.getVariables().get(0).equals(predicate.getVariables().get(0))) ||
+						(p.getName().equals(PredicateName.HOLDING) && (
+								p.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName()) || 
+								p.getVariables().get(0).getName().equals(predicate.getVariables().get(1).getName()))) || 
+						(p.getName().equals(PredicateName.CLEAR) && 
+								p.getVariables().get(0).getName().equals(predicate.getVariables().get(1))) ||
+						(p.getName().equals(PredicateName.HEAVIER) && (
+								p.getVariables().get(0).getName().equals(predicate.getVariables().get(0)) && 
+								p.getVariables().get(1).getName().equals(predicate.getVariables().get(1)))) ) {
+						hasContradictions = true;
+						state.setValid(false);
+						state.setReasonForInvalidState("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
+						break;
+					}
+				}
+				break;
+			/**
+			 * ON_TABLE(X) is invalid if: HOLDING(X,A), ON(X,Y) or USED_COLS_NUM(m>n) exist
+			 */
+			case ON_TABLE:
+				for (Predicate p: state.getPredicates()) {
+					if((p.getName().equals(PredicateName.ON) &&
+							p.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName())) || 
+					(p.getName().equals(PredicateName.HOLDING) && 
+							p.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName())) ||
+					(p.getName().equals(PredicateName.USED_COLS_NUM) && 
+							p.getCol() > maxColumns) ) {
+						hasContradictions = true;
+						state.setValid(false);
+						state.setReasonForInvalidState("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
+						break;
+					}
+				}
+				break;
+			/**
+			 * USED_COLS_NUM is invalid if: max number of columns exists. Here it also validates that the current amount 
+			 * is accurate
+			 */
+			case USED_COLS_NUM:
+				int foundColsUsed = (int) state.getPredicates().stream().filter(p -> p.getName().equals(PredicateName.ON_TABLE)).count();
+				if(predicate.getCol() != foundColsUsed) {
+					predicate.setCol(foundColsUsed);
+				}
+				if(predicate.getCol() > maxColumns) {
+					hasContradictions = true;
+					state.setValid(false);
+					state.setReasonForInvalidState("Max number of columns was passed");
+				}
+				break;
+			}
+			if(!state.isValid()) {
+				break;
+			}
+		}
+		return hasContradictions;
+	}
+	
+	private boolean isMaxColumnsReached(State state) {
+		return false;
+	}
+	
+	private boolean isEqualToAnyPreviousState(State state, Plan plan) {
+		return false;
+	}
+	
+	private boolean isValidWeightOfBlocks(State state) {
+		return false;
+	}
+	
+	private boolean isValidUseOfLeftArm(State state) {
 		return false;
 	}
 	
