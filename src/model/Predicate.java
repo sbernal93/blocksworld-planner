@@ -1,15 +1,35 @@
 package model;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Predicate {
 	
 	private PredicateName name;//ON, ON-Table, CLEAR
 	private List<Block> blocks;//Blocks: A, B, C, D...
+	private int col; //for used columns
+	private ArmType arm; //for empty arm
 	
 	public Predicate(PredicateName name, List<Block>  blocks) {
 		super();
 		this.name = name;
 		this.blocks = blocks;
+	}
+	
+	public Predicate(PredicateName name, List<Block> blocks, ArmType arm) {
+		super();
+		this.name = name;
+		this.blocks = blocks;
+		this.arm = arm;
+	}
+	public Predicate(PredicateName name, ArmType arm) {
+		super();
+		this.name = name;
+		this.arm = arm;
+	}
+	public Predicate(PredicateName name, int col) {
+		super();
+		this.name = name;
+		this.col = col;
 	}
 
 	public PredicateName getName() {
@@ -28,14 +48,48 @@ public class Predicate {
 		this.blocks = blocks;
 	}
 
+	public int getCol() {
+		return col;
+	}
+
+	public void setCol(int col) {
+		this.col = col;
+	}
+
+	public ArmType getArm() {
+		return arm;
+	}
+
+	public void setArm(ArmType arm) {
+		this.arm = arm;
+	}
+
 	@Override
 	public String toString() {
 		return "Predicate [" + name+ "(" + blocks+ ")]";
 	}
 	
 	public boolean equalPredicate(Predicate otherPredicate) {
-		return (otherPredicate.getName().equals(this.name) &&
-				otherPredicate.getVariables().get(0).getName().equals(this.getVariables().get(0).getName()));
+		if(this.name.equals(PredicateName.HOLDING)) {
+			return (otherPredicate.getName().equals(this.name) &&
+					otherPredicate.getVariables().get(0).getName().equals(this.getVariables().get(0).getName())
+					&& this.arm.equals(otherPredicate.getArm()));
+		} else if(this.blocks != null && this.blocks.size()>0) {
+			if(otherPredicate.getVariables() == null || otherPredicate.getVariables().size()!=this.blocks.size()) {
+				return false;
+			}
+			if(this.blocks.size() == 2) {
+				return (otherPredicate.getName().equals(this.name) &&
+						otherPredicate.getVariables().get(0).getName().equals(this.getVariables().get(0).getName())
+						&& otherPredicate.getVariables().get(1).getName().equals(this.getVariables().get(1).getName()));
+			}
+			return (otherPredicate.getName().equals(this.name) &&
+					otherPredicate.getVariables().get(0).getName().equals(this.getVariables().get(0).getName()));
+		} else if (this.arm != null) {
+			return (this.arm.equals(otherPredicate.getArm()));
+		} else {
+			return (this.col == otherPredicate.col);
+		}
 	}
 
 	@Override
