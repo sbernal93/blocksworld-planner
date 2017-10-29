@@ -1,5 +1,4 @@
 package model;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Predicate {
@@ -66,6 +65,15 @@ public class Predicate {
 
 	@Override
 	public String toString() {
+		if(this.name.equals(PredicateName.HOLDING)) {
+			return "Predicate [" + name+ "(" + blocks+ ", " + this.arm.name() + ")]";
+		} 
+		if(this.name.equals(PredicateName.EMPTY_ARM)) {
+			return "Predicate [" + name+ "(" + this.arm.name() + ")]";
+		}
+		if(this.name.equals(PredicateName.USED_COLS_NUM)) {
+			return "Predicate [" + name+ "(" + col + ")]";
+		}
 		return "Predicate [" + name+ "(" + blocks+ ")]";
 	}
 	
