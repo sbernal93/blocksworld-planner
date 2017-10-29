@@ -52,6 +52,11 @@ public class BlockWorldController {
 					//TODO: validate that plan changes inside method
 					planner = calculatePlan(planner, plan);
 				}
+				if(plan.isValidPlan() && plan.isCompletedPlan()) {
+					//We found a completed plan, no need to keep looking (not sure about this, needs to be tested)
+					planner.setCompletedPlan(plan);
+					break;
+				}
 			}
 			//at the end of this loop the planner object should have all the possible plans
 			//that where created, including failed ones and valid ones

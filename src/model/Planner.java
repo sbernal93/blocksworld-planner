@@ -6,6 +6,15 @@ import java.util.List;
 public class Planner {
 	
 	private List<Plan> plans;
+	private Plan completedPlan;
+
+	public Plan getCompletedPlan() {
+		return completedPlan;
+	}
+
+	public void setCompletedPlan(Plan completedPlan) {
+		this.completedPlan = completedPlan;
+	}
 
 	public List<Plan> getPlans() {
 		return plans;
