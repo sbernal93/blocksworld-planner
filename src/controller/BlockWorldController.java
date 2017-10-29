@@ -39,22 +39,23 @@ public class BlockWorldController {
 	
 	//TODO: test 
 	public void start(){
-		//TODO: goal state should be validated as well
-		planner = new Planner();
-		List< State> newPossibleStates = calculateNewStates(goalState);
-		for(State posibleState : newPossibleStates) {
-			Plan plan = new Plan(goalState);
-			plan.addState(posibleState);
-			planner.addPlan(plan);
-		}
-		for(Plan plan : planner.getPlans()) {
-			while(!plan.isCompletedPlan()) {
-				//TODO: validate that plan changes inside method
-				planner = calculatePlan(planner, plan);
+		if(isPossibleState(goalState, null)) {
+			planner = new Planner();
+			List< State> newPossibleStates = calculateNewStates(goalState);
+			for(State posibleState : newPossibleStates) {
+				Plan plan = new Plan(goalState);
+				plan.addState(posibleState);
+				planner.addPlan(plan);
 			}
+			for(Plan plan : planner.getPlans()) {
+				while(!plan.isCompletedPlan()) {
+					//TODO: validate that plan changes inside method
+					planner = calculatePlan(planner, plan);
+				}
+			}
+			//at the end of this loop the planner object should have all the possible plans
+			//that where created, including failed ones and valid ones
 		}
-		//at the end of this loop the planner object should have all the possible plans
-		//that where created, including failed ones and valid ones
 	}
 	
 	/**
@@ -117,6 +118,10 @@ public class BlockWorldController {
 	 * @return
 	 */
 	private boolean isPossibleState(State state, Plan plan) {
+		//if plan is null, where only checking the states predicates
+		if(plan == null) {
+			return !hasContradictingPredicates(state);
+		}
 		//some states can already have isValid set to false previously
 		if(state.isValid() && !hasContradictingPredicates(state) && !isEqualToAnyPreviousState(state, plan)) {
 			return true;
@@ -273,8 +278,17 @@ public class BlockWorldController {
 		return hasContradictions;
 	}
 	
+	/**
+	 * Checks if it is equal to any other state in the plan also checking the goalstate
+	 * @param state
+	 * @param plan
+	 * @return
+	 */
 	private boolean isEqualToAnyPreviousState(State state, Plan plan) {
-		return plan.getStates().stream().anyMatch(s -> s.areEqualStates(state));
+		if(!state.areEqualStates(goalState)) {
+			return plan.getStates().stream().anyMatch(s -> s.areEqualStates(state));
+		}
+		return false;
 	}
 	
 	/**
