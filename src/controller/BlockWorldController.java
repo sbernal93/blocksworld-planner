@@ -23,10 +23,7 @@ public class BlockWorldController {
 	private int maxColumns;
 	private State initialState;
 	private State goalState;
-	private State currentState;
 	private List<Operator> operators;
-	private int usedColumns;
-	private int numOfSteps;
 	private Planner planner;
 	
 	@SuppressWarnings("unchecked")
@@ -121,7 +118,7 @@ public class BlockWorldController {
 	 */
 	private boolean isPossibleState(State state, Plan plan) {
 		//some states can already have isValid set to false previously
-		if(state.isValid() && !hasContradictingPredicates(state)) {
+		if(state.isValid() && !hasContradictingPredicates(state) && !isEqualToAnyPreviousState(state, plan)) {
 			return true;
 		}
 		return false;
@@ -277,11 +274,7 @@ public class BlockWorldController {
 	}
 	
 	private boolean isEqualToAnyPreviousState(State state, Plan plan) {
-		return false;
-	}
-	
-	private boolean isValidUseOfLeftArm(State state) {
-		return false;
+		return plan.getStates().stream().anyMatch(s -> s.areEqualStates(state));
 	}
 	
 	/**
@@ -349,6 +342,8 @@ public class BlockWorldController {
 				stateFound.setReasonForInvalidState("After applying operator: [" + operator.toString() + "] "
 						+ " predicate: [" + found.get(0).toString() + "] would have been removed");
 			}
+			//Checks that the operators add list corresponds to the current state
+			//removes the predicates when found, if not found then state is invalid
 			for(Predicate p : operatorWithBlocks.getAddList() ) {
 				if(predicates.stream().anyMatch(pr -> p.equals(p))) {
 					predicates.remove(p);
