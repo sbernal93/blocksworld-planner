@@ -78,10 +78,9 @@ public class Predicate {
 	}
 	
 	public boolean equalPredicate(Predicate otherPredicate) {
-		try {
 		if(this.name.equals(PredicateName.HOLDING)) {
 			return (otherPredicate.getName().equals(this.name) &&
-					otherPredicate.getVariables().get(0).getName().equals(this.getVariables().get(0).getName())
+					otherPredicate.getVariables().get(0).equals(this.getVariables().get(0))
 					&& this.arm.equals(otherPredicate.getArm()));
 		} else if(this.blocks != null && this.blocks.size()>0) {
 			if(otherPredicate.getVariables() == null || otherPredicate.getVariables().size()!=this.blocks.size()) {
@@ -89,20 +88,17 @@ public class Predicate {
 			}
 			if(this.blocks.size() == 2) {
 				return (otherPredicate.getName().equals(this.name) &&
-						otherPredicate.getVariables().get(0).getName().equals(this.getVariables().get(0).getName())
-						&& otherPredicate.getVariables().get(1).getName().equals(this.getVariables().get(1).getName()));
+						otherPredicate.getVariables().get(0).equals(this.getVariables().get(0))
+						&& otherPredicate.getVariables().get(1).equals(this.getVariables().get(1)));
 			}
 			return (otherPredicate.getName().equals(this.name) &&
-					otherPredicate.getVariables().get(0).getName().equals(this.getVariables().get(0).getName()));
+					otherPredicate.getVariables().get(0).equals(this.getVariables().get(0)));
 		} else if (this.arm != null) {
 			return (this.arm.equals(otherPredicate.getArm()));
 		} else {
 			return (this.col == otherPredicate.col);
 		}
-		}catch(Exception e) {
-			//TODO: if there is only one block it throws null pointer in some cases, need to fix this
-			return false;
-		}
+
 	}
 
 	@Override

@@ -177,9 +177,9 @@ public class BlockWorldController {
 				for (Predicate p: state.getPredicates()) {
 					if(!p.equalPredicate(predicate)) {
 						if((p.getName().equals(PredicateName.ON) &&
-								p.getVariables().get(1).getName().equals(predicate.getVariables().get(0).getName())) || 
+								p.getVariables().get(1).equals(predicate.getVariables().get(0))) || 
 						(p.getName().equals(PredicateName.HOLDING) && 
-								p.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName()))) {
+								p.getVariables().get(0).equals(predicate.getVariables()))) {
 							hasContradictions = true;
 							state.setValid(false);
 							state.setReasonForInvalidState("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
@@ -213,8 +213,8 @@ public class BlockWorldController {
 				for (Predicate p: state.getPredicates()) {
 					if(!p.equalPredicate(predicate)) {
 						if(p.getName().equals(PredicateName.ON) && 
-								p.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName()) &&
-										p.getVariables().get(1).getName().equals(predicate.getVariables().get(1).getName())) {
+								p.getVariables().get(0).equals(predicate.getVariables().get(0)) &&
+										p.getVariables().get(1).equals(predicate.getVariables().get(1))) {
 							hasContradictions = true;
 							state.setValid(false);
 							state.setReasonForInvalidState("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
@@ -231,10 +231,10 @@ public class BlockWorldController {
 				for (Predicate p: state.getPredicates()) {
 					if(!p.equalPredicate(predicate)) {
 						if((p.getName().equals(PredicateName.ON) && (
-								p.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName()) &&
-										p.getVariables().get(1).getName().equals(predicate.getVariables().get(0).getName())))|| 
+								p.getVariables().get(0).equals(predicate.getVariables().get(0)) &&
+										p.getVariables().get(1).equals(predicate.getVariables().get(0))))|| 
 							(p.getName().equals(PredicateName.CLEAR) && 
-									p.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName())) || 
+									p.getVariables().get(0).equals(predicate.getVariables().get(0))) || 
 							(p.getName().equals(PredicateName.ON_TABLE) && 
 									p.getVariables().get(0).equals(predicate.getVariables().get(0))) ||
 							(p.getName().equals(PredicateName.EMPTY_ARM) && 
@@ -258,22 +258,22 @@ public class BlockWorldController {
 				for (Predicate p: state.getPredicates()) {
 					if(!p.equalPredicate(predicate)) {
 						if((p.getName().equals(PredicateName.ON) && (
-								p.getVariables().get(0).getName().equals(predicate.getVariables().get(1).getName()) &&
-										p.getVariables().get(1).getName().equals(predicate.getVariables().get(0).getName())))|| 
+								p.getVariables().get(0).equals(predicate.getVariables().get(1)) &&
+										p.getVariables().get(1).equals(predicate.getVariables().get(0))))|| 
 							(p.getName().equals(PredicateName.ON) && 
-								p.getVariables().get(1).getName().equals(predicate.getVariables().get(1).getName()))||
+								p.getVariables().get(1).equals(predicate.getVariables().get(1)))||
 							(p.getName().equals(PredicateName.CLEAR) && 
-									p.getVariables().get(0).getName().equals(predicate.getVariables().get(1).getName())) || 
+									p.getVariables().get(0).equals(predicate.getVariables().get(1))) || 
 							(p.getName().equals(PredicateName.ON_TABLE) && 
 									p.getVariables().get(0).equals(predicate.getVariables().get(0))) ||
 							(p.getName().equals(PredicateName.HOLDING) && (
-									p.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName()) || 
-									p.getVariables().get(0).getName().equals(predicate.getVariables().get(1).getName()))) || 
+									p.getVariables().get(0).equals(predicate.getVariables().get(0)) || 
+									p.getVariables().get(0).equals(predicate.getVariables().get(1)))) || 
 							(p.getName().equals(PredicateName.CLEAR) && 
-									p.getVariables().get(0).getName().equals(predicate.getVariables().get(1))) ||
+									p.getVariables().get(0).equals(predicate.getVariables().get(1))) ||
 							(p.getName().equals(PredicateName.HEAVIER) && (
-									p.getVariables().get(0).getName().equals(predicate.getVariables().get(0)) && 
-									p.getVariables().get(1).getName().equals(predicate.getVariables().get(1)))) ) {
+									p.getVariables().get(0).equals(predicate.getVariables().get(0)) && 
+									p.getVariables().get(1).equals(predicate.getVariables().get(1)))) ) {
 							hasContradictions = true;
 							state.setValid(false);
 							state.setReasonForInvalidState("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
@@ -290,9 +290,9 @@ public class BlockWorldController {
 				for (Predicate p: state.getPredicates()) {
 					if(!p.equalPredicate(predicate)) {
 						if((p.getName().equals(PredicateName.ON) &&
-								p.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName())) || 
+								p.getVariables().get(0).equals(predicate.getVariables().get(0))) || 
 						(p.getName().equals(PredicateName.HOLDING) && 
-								p.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName())) ||
+								p.getVariables().get(0).equals(predicate.getVariables().get(0))) ||
 						(p.getName().equals(PredicateName.USED_COLS_NUM) && 
 								p.getCol() > maxColumns) ) {
 							hasContradictions = true;
@@ -372,7 +372,11 @@ public class BlockWorldController {
 		List<Operator> operatorList = new ArrayList<>();
 		for(Operator operator : operators) {
 			if(operator.getAddList().stream().anyMatch(p -> p.getName().equals(predicate.getName()))) {
-				operatorList.add(operator);
+				if(!(predicate.getArm()!= null && predicate.getArm().equals(ArmType.LEFT) &&
+						(operator.getName().equals(OperatorName.PICK_UP) || 
+						operator.getName().equals(OperatorName.STACK)))){
+					operatorList.add(operator);
+				}
 			}
 		}
 		return operatorList;
@@ -390,47 +394,57 @@ public class BlockWorldController {
 		//stateFound.setOperatorUsedToReachState(operator);
 		List<Predicate> predicates = state.getPredicates();
 		List<Operator> operatorsWithBlocks = getOperatorsWithBlocks(operator, predicate);
-		for(Operator operatorWithBlocks: operatorsWithBlocks) {
-			State stateFound = new State();
-			//Java 8 magic, finds if any of the predicates in the del list of the operator
-			//matches any of the predicates in the current state (if no this state is invalid)
-			/*List<Predicate> found = new ArrayList<>();
-			found = operatorWithBlocks.getDelList().parallelStream()
-					 .filter( operatorDelPredicate-> state.getPredicates()
-	                   .parallelStream()
-	                   .anyMatch(operatorDelPredicate::equalPredicate)
-					 )
-					  .collect(Collectors.toList());
+		if(operatorsWithBlocks != null) {
+			for(Operator operatorWithBlocks: operatorsWithBlocks) {
+				State stateFound = new State();
+				//Java 8 magic, finds if any of the predicates in the del list of the operator
+				//matches any of the predicates in the current state (if no this state is invalid)
+				/*List<Predicate> found = new ArrayList<>();
+				found = operatorWithBlocks.getDelList().parallelStream()
+						 .filter( operatorDelPredicate-> state.getPredicates()
+		                   .parallelStream()
+		                   .anyMatch(operatorDelPredicate::equalPredicate)
+						 )
+						  .collect(Collectors.toList());
 
-			/*return state.getPredicates()
-								 .parallelStream()
-								 .anyMatch(operatorDelPredicate::equalPredicate);*/
-			//.anyMatch( statePredicate->operatorDelPredicate.equalPredicate(statePredicate) );
-			/*if(found.size()>0) {
-				stateFound.setValid(false);
-				stateFound.setReasonForInvalidState("After applying operator: [" + operator.toString() + "] "
-						+ " predicate: [" + found.get(0).toString() + "] would have been removed");
-			}*/
-			//Checks that the operators add list corresponds to the current state
-			//removes the predicates when found, if not found then state is invalid
-			for(Predicate p : operatorWithBlocks.getAddList() ) {
-				if(predicates.stream().anyMatch(pr -> p.equals(p))) {
-					predicates.remove(p);
-				} else {
+				/*return state.getPredicates()
+									 .parallelStream()
+									 .anyMatch(operatorDelPredicate::equalPredicate);*/
+				//.anyMatch( statePredicate->operatorDelPredicate.equalPredicate(statePredicate) );
+				/*if(found.size()>0) {
 					stateFound.setValid(false);
-					stateFound.setReasonForInvalidState("For operator: [" + operator.toString() + "] to be used"
-							+ " State needed to have: " + p);
+					stateFound.setReasonForInvalidState("After applying operator: [" + operator.toString() + "] "
+							+ " predicate: [" + found.get(0).toString() + "] would have been removed");
+				}*/
+				//Checks that the operators add list corresponds to the current state
+				//removes the predicates when found, if not found then state is invalid
+				for(Predicate p : operatorWithBlocks.getAddList() ) {
+					if(predicates.stream().anyMatch(pr -> p.equals(p))) {
+						predicates.remove(p);
+					} else {
+						stateFound.setValid(false);
+						stateFound.setReasonForInvalidState("For operator: [" + operator.toString() + "] to be used"
+								+ " State needed to have: " + p);
+					}
 				}
+				//predicates.remove(predicate);
+				predicates.addAll(operatorWithBlocks.getPreconditions());
+				stateFound.setOperatorUsedToReachState(operatorWithBlocks);
+				stateFound.setPredicates(predicates);
+				stateFound = removeRepeatedPredicates(stateFound);
+				statesFound.add(stateFound);
 			}
-			//predicates.remove(predicate);
-			predicates.addAll(operatorWithBlocks.getPreconditions());
-			stateFound.setOperatorUsedToReachState(operatorWithBlocks);
-			stateFound.setPredicates(predicates);
-			stateFound = removeRepeatedPredicates(stateFound);
+			
+		} else {
+			State stateFound = new State();
+			stateFound.setValid(false);
+			stateFound.setReasonForInvalidState("Operator: " + operator + " was impossible to apply");
+			stateFound.setOperatorUsedToReachState(operator);
+			stateFound.setPredicates(state.getPredicates());
 			statesFound.add(stateFound);
 		}
-		
 		return statesFound;
+		
 	}
 	
 	
@@ -452,6 +466,9 @@ public class BlockWorldController {
      * @return
      */
 	private List<Operator> getOperatorsWithBlocks(Operator operator, Predicate predicate) {
+		if(operator.getName().equals(OperatorName.PICK_UP)) {
+			System.out.println("ep");
+		}
 		Predicate addPredicateFromOperator;
 		List<Operator> operatorsWithBlocks = new ArrayList<>();
 		Operator operatorWithBlocks = new Operator();
@@ -492,8 +509,12 @@ public class BlockWorldController {
 		}
 		if((operator.getName().equals(OperatorName.LEAVE) || operator.getName().equals(OperatorName.STACK))
 				&& predicate.getArm()==null  && predicate.getVariables().get(0).getWeight()==1) {
-			if(predicate.getVariables().size() == 2) {
-				operatorsWithBlocks.add(OperatorLoader.load(operatorWithBlocks.getName(), predicate.getVariables().get(0),predicate.getVariables().get(1),ArmType.LEFT));
+			if(operator.getName().equals(OperatorName.STACK)) {
+				if(predicate.getVariables().size() <2) {
+					operatorsWithBlocks = null;
+				} else {
+					operatorsWithBlocks.add(OperatorLoader.load(operatorWithBlocks.getName(), predicate.getVariables().get(0),predicate.getVariables().get(1),ArmType.LEFT));
+				}
 			} else {
 				operatorsWithBlocks.add(OperatorLoader.load(operatorWithBlocks.getName(), predicate.getVariables().get(0),null, ArmType.LEFT));
 			}
