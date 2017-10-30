@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import model.ArmType;
 import model.Block;
 import model.InputLoader;
 import model.Operator;
 import model.OperatorLoader;
+import model.OperatorName;
 import model.OutputLoader;
 import model.Plan;
 import model.Planner;
@@ -31,10 +33,10 @@ public class BlockWorldController {
 	public void loadBlockWorld(String filepath){
 		operators = OperatorLoader.loadOperators();
 		Map<String, Object> inputMap = InputLoader.loadInput(filepath);
-		blocks = (List<Block>) inputMap.get("Blocks");
+		/*blocks = (List<Block>) inputMap.get("Blocks");
 		maxColumns = (int) inputMap.get("MaxColumns");
 		initialState = (State) inputMap.get("InitialState");
-		goalState =  (State) inputMap.get("GoalState");
+		goalState =  (State) inputMap.get("GoalState");*/
 	}
 	
 	
@@ -407,25 +409,29 @@ public class BlockWorldController {
 		Predicate addPredicateFromOperator;
 		List<Operator> operatorsWithBlocks = new ArrayList<>();
 		Operator operatorWithBlocks = new Operator();
+		ArmType armType = ArmType.GENERIC;
+		if(operator.getName().equals(OperatorName.LEAVE) || operator.getName().equals(OperatorName.STACK)) {
+			armType = predicate.getArm();
+		}
 		if(operator.getParamList().size() == predicate.getVariables().size()) {
 			//Tries to find the operator so that the add list element matches the predicate blocks
 			if(operator.getParamList().size() == 2) {
-				operatorWithBlocks = OperatorLoader.load(operator.getName(), predicate.getVariables().get(0).getName(), predicate.getVariables().get(1).getName());
+				operatorWithBlocks = OperatorLoader.load(operator.getName(), predicate.getVariables().get(0).getName(), predicate.getVariables().get(1).getName(), armType);
 				addPredicateFromOperator = operatorWithBlocks.getAddList().stream().filter(p -> p.getName().equals(predicate.getName())).findAny().orElse(null);
 				if(!addPredicateFromOperator.equalPredicate(predicate)) {
-					operatorWithBlocks = OperatorLoader.load(operator.getName(), predicate.getVariables().get(1).getName(), predicate.getVariables().get(0).getName());
 					//addPredicateFromOperator = operatorWithBlocks.getAddList().stream().filter(p -> p.getName().equals(predicate.getName())).findAny().orElse(null);
+					operatorWithBlocks = OperatorLoader.load(operator.getName(), predicate.getVariables().get(1).getName(), predicate.getVariables().get(0).getName(), armType);
 				}
 			} else {
-				operatorWithBlocks = OperatorLoader.load(operator.getName(), predicate.getVariables().get(0).getName(), "");
+					operatorWithBlocks = OperatorLoader.load(operator.getName(), predicate.getVariables().get(0).getName(), "", armType);
 			}
 			operatorsWithBlocks.add(operatorWithBlocks);
 		} else {
 			if(operator.getParamList().size() == 2) {
-				operatorWithBlocks = OperatorLoader.load(operator.getName(), predicate.getVariables().get(0).getName(), "X");
+				operatorWithBlocks = OperatorLoader.load(operator.getName(), predicate.getVariables().get(0).getName(), "X", armType);
 				addPredicateFromOperator = operatorWithBlocks.getAddList().stream().filter(p -> p.getName().equals(predicate.getName())).findAny().orElse(null);
 				if(!addPredicateFromOperator.equalPredicate(predicate)) {
-					operatorWithBlocks = OperatorLoader.load(operator.getName(), "X", predicate.getVariables().get(0).getName());
+					operatorWithBlocks = OperatorLoader.load(operator.getName(), "X", predicate.getVariables().get(0).getName(), armType);
 					//addPredicateFromOperator = operatorWithBlocks.getAddList().stream().filter(p -> p.getName().equals(predicate.getName())).findAny().orElse(null);
 					operatorsWithBlocks = calculateValueForParam(operatorWithBlocks, 0);
 				} else {
@@ -448,9 +454,9 @@ public class BlockWorldController {
 		for (Block block : blocks) {
 			Operator opParam = new Operator();
 			if(posOfParam == 0) {
-				opParam = OperatorLoader.load(operator.getName(), block.getName(), operator.getParamList().get(1).getName());
+				opParam = OperatorLoader.load(operator.getName(), block.getName(), operator.getParamList().get(1).getName(), null);
 			} else {
-				opParam = OperatorLoader.load(operator.getName(), operator.getParamList().get(0).getName(), block.getName());
+				opParam = OperatorLoader.load(operator.getName(), operator.getParamList().get(0).getName(), block.getName(), null);
 			}
 			possibleOperators.add(opParam);
 		}
