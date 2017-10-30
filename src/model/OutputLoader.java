@@ -1,5 +1,6 @@
 package model;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -39,7 +40,7 @@ public class OutputLoader {
 			Path file = Paths.get(fileName);
 			Files.write(file, lines, Charset.forName("UTF-8"));
 			System.out.println("Output file is: " + fileName);
-		}catch (Exception e) {
+		}catch (IOException e) {
 			System.out.println("There was an error creating output file");
 			e.printStackTrace();
 		}

@@ -78,6 +78,7 @@ public class Predicate {
 	}
 	
 	public boolean equalPredicate(Predicate otherPredicate) {
+		try {
 		if(this.name.equals(PredicateName.HOLDING)) {
 			return (otherPredicate.getName().equals(this.name) &&
 					otherPredicate.getVariables().get(0).getName().equals(this.getVariables().get(0).getName())
@@ -97,6 +98,10 @@ public class Predicate {
 			return (this.arm.equals(otherPredicate.getArm()));
 		} else {
 			return (this.col == otherPredicate.col);
+		}
+		}catch(Exception e) {
+			//TODO: if there is only one block it throws null pointer in some cases, need to fix this
+			return false;
 		}
 	}
 

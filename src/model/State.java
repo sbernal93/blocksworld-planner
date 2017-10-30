@@ -53,14 +53,26 @@ public class State {
 	}
 
 	public boolean areEqualStates(State otherState) {
+		boolean predicateFound = false;
 		for(Predicate predicate : predicates) {
-			if (otherState.getPredicates().stream().filter(p -> p.getName().equals(predicate.getName()) &&
-					p.getVariables().equals(predicate.getVariables())).count() <= 0) {
-						return false;
-					}
+			for(Predicate otherPredicate : otherState.getPredicates()) {
+				if(predicate.equalPredicate(otherPredicate)){
+					predicateFound = true;
+				}
+			}
+			if(!predicateFound) {
+				return false;
+			}
+			predicateFound = false;
 		}
 		return true;
 	}
-	
 
+	@Override
+	public String toString() {
+		return "State [predicates=" + predicates + ", operatorUsedToReachState=" + operatorUsedToReachState
+				+ ", isValid=" + isValid + ", reasonForInvalidState=" + reasonForInvalidState + "]";
+	}
+	
+	
 }

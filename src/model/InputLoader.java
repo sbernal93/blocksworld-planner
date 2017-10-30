@@ -11,7 +11,8 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 public class InputLoader {
-	
+
+	private static List<Block> blockList;
 	/**
 	 * Loads input in a map like:
 	 * ["InitialState"={ON-TABLE(C),ON(B,C),ON(A,B),CLEAR(A);ON-TABLE(D),ON(F,D)},
@@ -31,9 +32,9 @@ public class InputLoader {
 		try {
 			BufferedReader fin=new BufferedReader(new FileReader(filepath));
 			Map<String, Object> map = new HashMap<String, Object>();
-			List<Block> blockList = new ArrayList<>();
 			List<Predicate> initStatePredicates = new ArrayList<>();
 			List<Predicate> goalStatePredicates = new ArrayList<>();
+			blockList = new ArrayList<>();
 			State initialState = new State();
 			State goalState = new State();
 			
@@ -41,7 +42,7 @@ public class InputLoader {
 				line = fin.readLine();
 				int positionEqualSign = line.indexOf("=");
 				String section = line.substring(0, positionEqualSign);
-				System.out.println("Section: "+section);
+				//System.out.println("Section: "+section);
 				line=line.substring(positionEqualSign+1);
 				StringTokenizer tk = new StringTokenizer(line,".");
 				
@@ -61,7 +62,7 @@ public class InputLoader {
 					if(section.equals("GoalState")) {
 						goalStatePredicates.add(getPredicateFromLine(tkn));
 					}
-					System.out.println(tkn);
+					//System.out.println(tkn);
 				}
 				if(section.equals("Blocks")) {
 					map.put(section, blockList);
@@ -74,7 +75,7 @@ public class InputLoader {
 					goalState.setPredicates(goalStatePredicates);
 					map.put("GoalState", goalState);
 				}
-				System.out.println("---------------------- \n");
+				//System.out.println("---------------------- \n");
 			
 			}
 			System.out.println("Map is: " + map);
@@ -94,25 +95,28 @@ public class InputLoader {
 		predicateName = predicateName.replace("-", "_");
 		String[] paramSplit = predicateSplit[1].replace(")", "").split(",");
 		int c = 0;
-		List<Block> blockList = new ArrayList<>();
+		List<Block> blocks = new ArrayList<>();
 		ArmType type = ArmType.GENERIC;
 		while(c < paramSplit.length) {
-			if(paramSplit[c].equals("L") || paramSplit[c].equals("R")) {
-				if(paramSplit[c].equals("L")) {
+			String name = paramSplit[c];
+			if(name.equals("L") || name.equals("R")) {
+				if(name.equals("L")) {
 					type = ArmType.LEFT;
 				} else {
 					type = ArmType.RIGHT;
 				}
 			} else {
-				blockList.add(new Block(paramSplit[c]));
+				
+				Block b = blockList.stream().filter(bl -> bl.getName().equals(name)).findFirst().orElse(null);
+				blocks.add(b);
 			}
 			c++;
 		}
-		if(blockList.size()>0) {
+		if(blocks.size()>0) {
 			if(type.equals(ArmType.GENERIC)){
-				return new Predicate(PredicateName.valueOf(predicateName), blockList);
+				return new Predicate(PredicateName.valueOf(predicateName), blocks);
 			} else {
-				return new Predicate(PredicateName.valueOf(predicateName), blockList, type);
+				return new Predicate(PredicateName.valueOf(predicateName), blocks, type);
 			}
 		} else {
 			return new Predicate(PredicateName.valueOf(predicateName), type);

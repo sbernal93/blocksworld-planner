@@ -2,6 +2,7 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -28,6 +29,7 @@ public class BlockWorldController {
 	private State goalState;
 	private List<Operator> operators;
 	private Planner planner;
+	private List<Plan> auxPlans;
 	
 	@SuppressWarnings("unchecked")
 	public void loadBlockWorld(String filepath){
@@ -42,25 +44,19 @@ public class BlockWorldController {
 	
 	//TODO: test 
 	public void start(){
+		System.out.println("Starting planner");
 		if(isPossibleState(goalState, null)) {
+			System.out.println("Goal state is valid, continuing");
 			planner = new Planner();
 			List< State> newPossibleStates = calculateNewStates(goalState);
+			System.out.println(newPossibleStates);
 			for(State posibleState : newPossibleStates) {
 				Plan plan = new Plan(goalState);
 				plan.addState(posibleState);
 				planner.addPlan(plan);
 			}
-			for(Plan plan : planner.getPlans()) {
-				while(!plan.isCompletedPlan()) {
-					//TODO: validate that plan changes inside method
-					planner = calculatePlan(planner, plan);
-				}
-				if(plan.isValidPlan() && plan.isCompletedPlan()) {
-					//We found a completed plan, no need to keep looking (not sure about this, needs to be tested)
-					planner.setCompletedPlan(plan);
-					break;
-				}
-			}
+			auxPlans = new ArrayList<Plan>();
+			cyclePlanner();
 			//at the end of this loop the planner object should have all the possible plans
 			//that where created, including failed ones and valid ones
 			OutputLoader.generateOutput(planner);
@@ -68,14 +64,41 @@ public class BlockWorldController {
 	}
 	
 	/**
-	 * Planner is returned because new plans can result from calculating a plan
-	 * this method calculate the next possible states that can be the outcome of a plan
+	 * Recursive method since java doesnt allow us to dynamically change a list,
+	 * this method cycles the plans stored in the planner and any new plans are
+	 * added to an aux list, if any new plans are added to the aux list, they are added
+	 * to the planner, the aux list is reset, and the method is called again.
+	 * 
+	 */
+	private void cyclePlanner() {
+		for(Plan plan : planner.getPlans()) {
+		/*for (currentIterator = planner.getPlans().iterator(); currentIterator.hasNext(); ) {
+			Plan plan = currentIterator.next();*/
+			while(!plan.isCompletedPlan()) {
+				calculatePlan(plan);
+			}
+			if(plan.isValidPlan() && plan.isCompletedPlan()) {
+				//We found a completed plan, no need to keep looking (not sure about this, needs to be tested)
+				planner.setCompletedPlan(plan);
+				break;
+			}
+		}
+		if(auxPlans.size()>0) {
+			planner.getPlans().addAll(auxPlans);
+			auxPlans = new ArrayList<>();
+			cyclePlanner();
+		}
+	}
+	
+	/**
+	 *
+	 * this method calculates the next possible states that can be the outcome of a plan
 	 * by applying diferent operators.
 	 * @param planner
 	 * @param plan
 	 * @return
 	 */
-	private Planner calculatePlan(Planner planner, Plan plan) {
+	private void calculatePlan( Plan plan) {
 		//the last state of the plan is used to validate if we finished
 		//or to determine where to continue
 		State finalStateInList = plan.getStates().get(plan.getStates().size()-1);
@@ -100,7 +123,8 @@ public class BlockWorldController {
 						//this plan may not be possible
 						Plan newPlan = plan.makeCopyPlan();
 						newPlan.addState(possibleState);
-						planner.addPlan(newPlan);
+						//planner.addPlan(newPlan);
+						auxPlans.add(newPlan);
 					}
 				}
 			} else {
@@ -110,8 +134,6 @@ public class BlockWorldController {
 				plan.setCompletedPlan(true);
 			}
 		}
-		
-		return planner;
 	}
 	
 	
@@ -153,14 +175,17 @@ public class BlockWorldController {
 			 */
 			case CLEAR:
 				for (Predicate p: state.getPredicates()) {
-					if((p.getName().equals(PredicateName.ON) &&
-							p.getVariables().get(1).getName().equals(predicate.getVariables().get(0).getName())) || 
-					(p.getName().equals(PredicateName.HOLDING) && 
-							p.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName()))) {
-						hasContradictions = true;
-						state.setValid(false);
-						state.setReasonForInvalidState("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
-						break;
+					if(!p.equalPredicate(predicate)) {
+						if((p.getName().equals(PredicateName.ON) &&
+								p.getVariables().get(1).getName().equals(predicate.getVariables().get(0).getName())) || 
+						(p.getName().equals(PredicateName.HOLDING) && 
+								p.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName()))) {
+							hasContradictions = true;
+							state.setValid(false);
+							state.setReasonForInvalidState("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
+							System.out.println("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
+							break;
+						}
 					}
 				}
 				break;
@@ -169,12 +194,15 @@ public class BlockWorldController {
 			 */
 			case EMPTY_ARM:
 				for (Predicate p: state.getPredicates()) {
-					if(p.getName().equals(PredicateName.HOLDING) && 
-							p.getArm().equals(predicate.getArm())) {
-						hasContradictions = true;
-						state.setValid(false);
-						state.setReasonForInvalidState("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
-						break;
+					if(!p.equalPredicate(predicate)) {
+						if(p.getName().equals(PredicateName.HOLDING) && 
+								p.getArm().equals(predicate.getArm())) {
+							hasContradictions = true;
+							state.setValid(false);
+							state.setReasonForInvalidState("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
+							System.out.println("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
+							break;
+						}
 					}
 				}
 				break;
@@ -183,13 +211,16 @@ public class BlockWorldController {
 			 */
 			case HEAVIER:
 				for (Predicate p: state.getPredicates()) {
-					if(p.getName().equals(PredicateName.ON) && 
-							p.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName()) &&
-									p.getVariables().get(1).getName().equals(predicate.getVariables().get(1).getName())) {
-						hasContradictions = true;
-						state.setValid(false);
-						state.setReasonForInvalidState("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
-						break;
+					if(!p.equalPredicate(predicate)) {
+						if(p.getName().equals(PredicateName.ON) && 
+								p.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName()) &&
+										p.getVariables().get(1).getName().equals(predicate.getVariables().get(1).getName())) {
+							hasContradictions = true;
+							state.setValid(false);
+							state.setReasonForInvalidState("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
+							System.out.println("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
+							break;
+						}
 					}
 				}
 				break;
@@ -198,19 +229,22 @@ public class BlockWorldController {
 			 */
 			case HOLDING:
 				for (Predicate p: state.getPredicates()) {
-					if((p.getName().equals(PredicateName.ON) && (
-							p.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName()) &&
-									p.getVariables().get(1).getName().equals(predicate.getVariables().get(0).getName())))|| 
-						(p.getName().equals(PredicateName.CLEAR) && 
-								p.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName())) || 
-						(p.getName().equals(PredicateName.ON_TABLE) && 
-								p.getVariables().get(0).equals(predicate.getVariables().get(0))) ||
-						(p.getName().equals(PredicateName.EMPTY_ARM) && 
-								p.getArm().equals(predicate.getArm()))) {
-						hasContradictions = true;
-						state.setValid(false);
-						state.setReasonForInvalidState("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
-						break;
+					if(!p.equalPredicate(predicate)) {
+						if((p.getName().equals(PredicateName.ON) && (
+								p.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName()) &&
+										p.getVariables().get(1).getName().equals(predicate.getVariables().get(0).getName())))|| 
+							(p.getName().equals(PredicateName.CLEAR) && 
+									p.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName())) || 
+							(p.getName().equals(PredicateName.ON_TABLE) && 
+									p.getVariables().get(0).equals(predicate.getVariables().get(0))) ||
+							(p.getName().equals(PredicateName.EMPTY_ARM) && 
+									p.getArm().equals(predicate.getArm()))) {
+							hasContradictions = true;
+							state.setValid(false);
+							state.setReasonForInvalidState("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
+							System.out.println("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
+							break;
+						}
 					}
 				}
 				break;
@@ -222,27 +256,30 @@ public class BlockWorldController {
 			 */
 			case ON:
 				for (Predicate p: state.getPredicates()) {
-					if((p.getName().equals(PredicateName.ON) && (
-							p.getVariables().get(0).getName().equals(predicate.getVariables().get(1).getName()) &&
-									p.getVariables().get(1).getName().equals(predicate.getVariables().get(0).getName())))|| 
-						(p.getName().equals(PredicateName.ON) && 
-							p.getVariables().get(1).getName().equals(predicate.getVariables().get(1).getName()))||
-						(p.getName().equals(PredicateName.CLEAR) && 
-								p.getVariables().get(0).getName().equals(predicate.getVariables().get(1).getName())) || 
-						(p.getName().equals(PredicateName.ON_TABLE) && 
-								p.getVariables().get(0).equals(predicate.getVariables().get(0))) ||
-						(p.getName().equals(PredicateName.HOLDING) && (
-								p.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName()) || 
-								p.getVariables().get(0).getName().equals(predicate.getVariables().get(1).getName()))) || 
-						(p.getName().equals(PredicateName.CLEAR) && 
-								p.getVariables().get(0).getName().equals(predicate.getVariables().get(1))) ||
-						(p.getName().equals(PredicateName.HEAVIER) && (
-								p.getVariables().get(0).getName().equals(predicate.getVariables().get(0)) && 
-								p.getVariables().get(1).getName().equals(predicate.getVariables().get(1)))) ) {
-						hasContradictions = true;
-						state.setValid(false);
-						state.setReasonForInvalidState("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
-						break;
+					if(!p.equalPredicate(predicate)) {
+						if((p.getName().equals(PredicateName.ON) && (
+								p.getVariables().get(0).getName().equals(predicate.getVariables().get(1).getName()) &&
+										p.getVariables().get(1).getName().equals(predicate.getVariables().get(0).getName())))|| 
+							(p.getName().equals(PredicateName.ON) && 
+								p.getVariables().get(1).getName().equals(predicate.getVariables().get(1).getName()))||
+							(p.getName().equals(PredicateName.CLEAR) && 
+									p.getVariables().get(0).getName().equals(predicate.getVariables().get(1).getName())) || 
+							(p.getName().equals(PredicateName.ON_TABLE) && 
+									p.getVariables().get(0).equals(predicate.getVariables().get(0))) ||
+							(p.getName().equals(PredicateName.HOLDING) && (
+									p.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName()) || 
+									p.getVariables().get(0).getName().equals(predicate.getVariables().get(1).getName()))) || 
+							(p.getName().equals(PredicateName.CLEAR) && 
+									p.getVariables().get(0).getName().equals(predicate.getVariables().get(1))) ||
+							(p.getName().equals(PredicateName.HEAVIER) && (
+									p.getVariables().get(0).getName().equals(predicate.getVariables().get(0)) && 
+									p.getVariables().get(1).getName().equals(predicate.getVariables().get(1)))) ) {
+							hasContradictions = true;
+							state.setValid(false);
+							state.setReasonForInvalidState("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
+							System.out.println("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
+							break;
+						}
 					}
 				}
 				break;
@@ -251,16 +288,19 @@ public class BlockWorldController {
 			 */
 			case ON_TABLE:
 				for (Predicate p: state.getPredicates()) {
-					if((p.getName().equals(PredicateName.ON) &&
-							p.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName())) || 
-					(p.getName().equals(PredicateName.HOLDING) && 
-							p.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName())) ||
-					(p.getName().equals(PredicateName.USED_COLS_NUM) && 
-							p.getCol() > maxColumns) ) {
-						hasContradictions = true;
-						state.setValid(false);
-						state.setReasonForInvalidState("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
-						break;
+					if(!p.equalPredicate(predicate)) {
+						if((p.getName().equals(PredicateName.ON) &&
+								p.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName())) || 
+						(p.getName().equals(PredicateName.HOLDING) && 
+								p.getVariables().get(0).getName().equals(predicate.getVariables().get(0).getName())) ||
+						(p.getName().equals(PredicateName.USED_COLS_NUM) && 
+								p.getCol() > maxColumns) ) {
+							hasContradictions = true;
+							state.setValid(false);
+							state.setReasonForInvalidState("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
+							System.out.println("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
+							break;
+						}
 					}
 				}
 				break;
@@ -295,7 +335,11 @@ public class BlockWorldController {
 	 */
 	private boolean isEqualToAnyPreviousState(State state, Plan plan) {
 		if(!state.areEqualStates(goalState)) {
-			return plan.getStates().stream().anyMatch(s -> s.areEqualStates(state));
+			List<State> states = plan.getStates().stream().filter(s -> s.areEqualStates(state)).collect(Collectors.toList());
+			 if(states.size()>2) {
+				 state.setReasonForInvalidState("State is equal to another previous state");
+				 return true;
+			 }
 		}
 		return false;
 	}
@@ -349,22 +393,24 @@ public class BlockWorldController {
 		for(Operator operatorWithBlocks: operatorsWithBlocks) {
 			State stateFound = new State();
 			//Java 8 magic, finds if any of the predicates in the del list of the operator
-			//matches any of the predicates in the current state (if so this state is invalid)
-			List<Predicate> found = operatorWithBlocks.getDelList().parallelStream()
+			//matches any of the predicates in the current state (if no this state is invalid)
+			/*List<Predicate> found = new ArrayList<>();
+			found = operatorWithBlocks.getDelList().parallelStream()
 					 .filter( operatorDelPredicate-> state.getPredicates()
 	                   .parallelStream()
 	                   .anyMatch(operatorDelPredicate::equalPredicate)
 					 )
 					  .collect(Collectors.toList());
+
 			/*return state.getPredicates()
 								 .parallelStream()
 								 .anyMatch(operatorDelPredicate::equalPredicate);*/
 			//.anyMatch( statePredicate->operatorDelPredicate.equalPredicate(statePredicate) );
-			if(found.size()>0) {
+			/*if(found.size()>0) {
 				stateFound.setValid(false);
 				stateFound.setReasonForInvalidState("After applying operator: [" + operator.toString() + "] "
 						+ " predicate: [" + found.get(0).toString() + "] would have been removed");
-			}
+			}*/
 			//Checks that the operators add list corresponds to the current state
 			//removes the predicates when found, if not found then state is invalid
 			for(Predicate p : operatorWithBlocks.getAddList() ) {
@@ -409,56 +455,86 @@ public class BlockWorldController {
 		Predicate addPredicateFromOperator;
 		List<Operator> operatorsWithBlocks = new ArrayList<>();
 		Operator operatorWithBlocks = new Operator();
-		ArmType armType = ArmType.GENERIC;
-		if(operator.getName().equals(OperatorName.LEAVE) || operator.getName().equals(OperatorName.STACK)) {
+		ArmType armType = ArmType.RIGHT;
+		if((operator.getName().equals(OperatorName.LEAVE) || operator.getName().equals(OperatorName.STACK))
+				&& predicate.getArm()!=null) {
 			armType = predicate.getArm();
 		}
-		if(operator.getParamList().size() == predicate.getVariables().size()) {
+		if(predicate.getVariables() != null && (operator.getParamList().size() == predicate.getVariables().size())) {
 			//Tries to find the operator so that the add list element matches the predicate blocks
 			if(operator.getParamList().size() == 2) {
-				operatorWithBlocks = OperatorLoader.load(operator.getName(), predicate.getVariables().get(0).getName(), predicate.getVariables().get(1).getName(), armType);
+				operatorWithBlocks = OperatorLoader.load(operator.getName(), predicate.getVariables().get(0), predicate.getVariables().get(1), armType);
 				addPredicateFromOperator = operatorWithBlocks.getAddList().stream().filter(p -> p.getName().equals(predicate.getName())).findAny().orElse(null);
 				if(!addPredicateFromOperator.equalPredicate(predicate)) {
 					//addPredicateFromOperator = operatorWithBlocks.getAddList().stream().filter(p -> p.getName().equals(predicate.getName())).findAny().orElse(null);
-					operatorWithBlocks = OperatorLoader.load(operator.getName(), predicate.getVariables().get(1).getName(), predicate.getVariables().get(0).getName(), armType);
+					operatorWithBlocks = OperatorLoader.load(operator.getName(), predicate.getVariables().get(1), predicate.getVariables().get(0), armType);
 				}
 			} else {
-					operatorWithBlocks = OperatorLoader.load(operator.getName(), predicate.getVariables().get(0).getName(), "", armType);
+					operatorWithBlocks = OperatorLoader.load(operator.getName(), predicate.getVariables().get(0), null, armType);
 			}
 			operatorsWithBlocks.add(operatorWithBlocks);
 		} else {
-			if(operator.getParamList().size() == 2) {
-				operatorWithBlocks = OperatorLoader.load(operator.getName(), predicate.getVariables().get(0).getName(), "X", armType);
+			if(predicate.getVariables() == null) {
+				//This is for cases like EMPTY_ARM that can hava operators like STACK(X,Y), since empty arm
+				//doesnt have variables, both blocks are param
+				operatorsWithBlocks = calculateValueForParam(operator, 2, armType);
+			} else if(operator.getParamList().size() == 2) {
+				operatorWithBlocks = OperatorLoader.load(operator.getName(), predicate.getVariables().get(0), new Block("X"), armType);
 				addPredicateFromOperator = operatorWithBlocks.getAddList().stream().filter(p -> p.getName().equals(predicate.getName())).findAny().orElse(null);
 				if(!addPredicateFromOperator.equalPredicate(predicate)) {
-					operatorWithBlocks = OperatorLoader.load(operator.getName(), "X", predicate.getVariables().get(0).getName(), armType);
+					operatorWithBlocks = OperatorLoader.load(operator.getName(), new Block("X"), predicate.getVariables().get(0), armType);
 					//addPredicateFromOperator = operatorWithBlocks.getAddList().stream().filter(p -> p.getName().equals(predicate.getName())).findAny().orElse(null);
-					operatorsWithBlocks = calculateValueForParam(operatorWithBlocks, 0);
+					operatorsWithBlocks = calculateValueForParam(operatorWithBlocks, 0, armType);
 				} else {
-					operatorsWithBlocks = calculateValueForParam(operatorWithBlocks, 1);
+					operatorsWithBlocks = calculateValueForParam(operatorWithBlocks, 1, armType);
 				}
+			}
+		}
+		if((operator.getName().equals(OperatorName.LEAVE) || operator.getName().equals(OperatorName.STACK))
+				&& predicate.getArm()==null  && predicate.getVariables().get(0).getWeight()==1) {
+			if(predicate.getVariables().size() == 2) {
+				operatorsWithBlocks.add(OperatorLoader.load(operatorWithBlocks.getName(), predicate.getVariables().get(0),predicate.getVariables().get(1),ArmType.LEFT));
+			} else {
+				operatorsWithBlocks.add(OperatorLoader.load(operatorWithBlocks.getName(), predicate.getVariables().get(0),null, ArmType.LEFT));
 			}
 		}
 		return operatorsWithBlocks;
 	}
 
 	/**
-	 * This method calculates all the possible values for the para in an operator,
+	 * This method calculates all the possible values for the para, in an operator,
 	 * it does not validate if the param is valid
 	 * @param operator
 	 * @param posOfParam
 	 * @return
 	 */
-	private List<Operator> calculateValueForParam(Operator operator, int posOfParam) {
+	private List<Operator> calculateValueForParam(Operator operator, int posOfParam, ArmType type) {
 		List<Operator> possibleOperators = new ArrayList<>();
-		for (Block block : blocks) {
-			Operator opParam = new Operator();
-			if(posOfParam == 0) {
-				opParam = OperatorLoader.load(operator.getName(), block.getName(), operator.getParamList().get(1).getName(), null);
-			} else {
-				opParam = OperatorLoader.load(operator.getName(), operator.getParamList().get(0).getName(), block.getName(), null);
+		if(posOfParam == 2) {
+			for (Block block : blocks) {
+				for (Block b : blocks) {
+					if(!b.getName().equals(block.getName())) {
+						Operator opParam = new Operator();
+						opParam = OperatorLoader.load(operator.getName(), block, b, type);
+						possibleOperators.add(opParam);
+					}
+				}
 			}
-			possibleOperators.add(opParam);
+		} else {
+			for (Block block : blocks) {
+				Operator opParam = new Operator();
+				if(posOfParam == 0) {
+					if(block.getName() != operator.getParamList().get(1).getName()) {
+						opParam = OperatorLoader.load(operator.getName(), block, operator.getParamList().get(1), type);
+						possibleOperators.add(opParam);
+					}
+				} else {
+					if(block.getName() != operator.getParamList().get(0).getName()) {
+						opParam = OperatorLoader.load(operator.getName(), operator.getParamList().get(0), block, type);
+						possibleOperators.add(opParam);
+					}
+				}
+			}	
 		}
 		return possibleOperators;
 	}

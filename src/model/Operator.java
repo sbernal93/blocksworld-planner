@@ -9,19 +9,21 @@ public class Operator {
 	private List<Predicate> addList;
 	private List<Predicate> delList;
 	private List<Block> paramList;
+	private ArmType arm;
 	
 	public Operator() {
 		super();
 	}
 
 	public Operator(OperatorName name, List<Predicate> preconditions, List<Predicate> addList,
-			List<Predicate> delList, List<Block> paramList) {
+			List<Predicate> delList, List<Block> paramList, ArmType arm) {
 		super();
 		this.name = name;
 		this.preconditions = preconditions;
 		this.addList = addList;
 		this.delList = delList;
 		this.paramList = paramList;
+		this.arm = arm;
 	}
 
 	public OperatorName getName() {
@@ -88,9 +90,9 @@ public class Operator {
 	@Override
 	public String toString() {
 		if(this.paramList.size() == 1) {
-			return this.name + "(" + this.paramList.get(0) + ")";
+			return this.name + "(" + this.paramList.get(0) + ", Arm: " + arm + ")";
 		}
-		return this.name + "(" + this.paramList.get(0).getName() + ", " + this.paramList.get(1).getName() + ")";
+		return this.name + "(" + this.paramList.get(0).getName() + ", " + this.paramList.get(1).getName() + ", Arm: " + arm + ")";
 	}
 	
 	

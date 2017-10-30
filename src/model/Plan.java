@@ -57,5 +57,10 @@ public class Plan {
 		return new Plan(this.initialState, new ArrayList(this.states), true, false);
 
 	}
+	@Override
+	public String toString() {
+		return "Plan [initialState=" + initialState + ", states=" + states + ", isValidPlan=" + isValidPlan
+				+ ", isCompletedPlan=" + isCompletedPlan + "]";
+	}
 	
 }
