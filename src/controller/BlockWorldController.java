@@ -33,10 +33,10 @@ public class BlockWorldController {
 	public void loadBlockWorld(String filepath){
 		operators = OperatorLoader.loadOperators();
 		Map<String, Object> inputMap = InputLoader.loadInput(filepath);
-		/*blocks = (List<Block>) inputMap.get("Blocks");
+		blocks = (List<Block>) inputMap.get("Blocks");
 		maxColumns = (int) inputMap.get("MaxColumns");
 		initialState = (State) inputMap.get("InitialState");
-		goalState =  (State) inputMap.get("GoalState");*/
+		goalState =  (State) inputMap.get("GoalState");
 	}
 	
 	

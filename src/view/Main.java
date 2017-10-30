@@ -14,8 +14,8 @@ public class Main {
             String filePath = scanner.nextLine();
             System.out.println("Filepath is: " + filePath);
             BlockWorldController controller = new BlockWorldController();
-           /* controller.loadBlockWorld(filePath);
-            controller.start();*/
+            controller.loadBlockWorld(filePath);
+            //controller.start();
         } catch(Exception ex) {
             //TODO: catch any errors specially loading blocksworld and at least show some message
             ex.printStackTrace();
