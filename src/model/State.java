@@ -55,15 +55,17 @@ public class State {
 	public boolean areEqualStates(State otherState) {
 		boolean predicateFound = false;
 		for(Predicate predicate : predicates) {
-			for(Predicate otherPredicate : otherState.getPredicates()) {
-				if(predicate.equalPredicate(otherPredicate)){
-					predicateFound = true;
+			if(!predicate.getName().equals(PredicateName.HEAVIER) || !predicate.getName().equals(PredicateName.LIGHT_BLOCK)){
+				for(Predicate otherPredicate : otherState.getPredicates()) {
+					if(predicate.equalPredicate(otherPredicate)){
+						predicateFound = true;
+					}
 				}
+				if(!predicateFound) {
+					return false;
+				}
+					predicateFound = false;
 			}
-			if(!predicateFound) {
-				return false;
-			}
-			predicateFound = false;
 		}
 		return true;
 	}

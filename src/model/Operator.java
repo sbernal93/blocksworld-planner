@@ -90,7 +90,7 @@ public class Operator {
 	@Override
 	public String toString() {
 		if(this.paramList.size() == 1) {
-			return this.name + "(" + this.paramList.get(0) + ", Arm: " + arm + ")";
+			return this.name + "(" + this.paramList.get(0).getName() + ", Arm: " + arm + ")";
 		}
 		return this.name + "(" + this.paramList.get(0).getName() + ", " + this.paramList.get(1).getName() + ", Arm: " + arm + ")";
 	}

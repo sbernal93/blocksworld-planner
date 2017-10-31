@@ -14,23 +14,34 @@ public class OutputLoader {
 
 	public static void generateOutput(Planner planner) {
 		try {
-			StringJoiner operatorJoiner = new StringJoiner(",");
-			for(State state : planner.getCompletedPlan().getStates()) {
-				operatorJoiner.add(state.getOperatorUsedToReachState().toString());
-			}
+			
 			List<String> lines = new ArrayList<>();
-			lines.add(String.valueOf(planner.getCompletedPlan().getStates().size()));
-			lines.add(String.valueOf(planner.getCompletedPlan().getStates().size()));
-			lines.add(operatorJoiner.toString());
+			if(planner.getCompletedPlan() != null) { 
+				StringJoiner operatorJoiner = new StringJoiner(",");
+				for(State state : planner.getCompletedPlan().getStates()) {
+					operatorJoiner.add(state.getOperatorUsedToReachState().toString());
+				}
+				lines.add(String.valueOf(planner.getCompletedPlan().getStates().size()));
+				lines.add(String.valueOf(planner.getCompletedPlan().getStates().size()));
+				lines.add(operatorJoiner.toString());
+			} else {
+				lines.add("No plan found");
+			}
 			lines.add("------------------------------------------------------------");
 			for (Plan plan : planner.getPlans()) {
 				State lastState = plan.getStates().get(plan.getStates().size()-1);
 				//added this validation to make sure we dont add the finished plan
 				if(!lastState.isValid()) {
 					StringJoiner predicateJoiner = new StringJoiner(",");
+					StringJoiner operatorJoiner = new StringJoiner(",");
+					for(State state : plan.getStates()) {
+						operatorJoiner.add(state.getOperatorUsedToReachState().toString());
+					}
 					for(Predicate predicate : lastState.getPredicates()) {
 						predicateJoiner.add(predicate.toString());
 					}
+					lines.add("State: ");
+					lines.add("Operators used: " + operatorJoiner.toString()); 
 					lines.add(predicateJoiner.toString());
 					lines.add(lastState.getReasonForInvalidState());
 					lines.add("------------------------------------------------------------");

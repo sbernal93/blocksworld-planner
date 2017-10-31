@@ -88,7 +88,7 @@ public class OperatorLoader {
 		blockList = new ArrayList<>();
 		blockList.add(blockX);
 		preconditions.add(new Predicate(PredicateName.CLEAR, blockList));
-		addList.add(new Predicate(PredicateName.CLEAR, blockList));
+		delList.add(new Predicate(PredicateName.CLEAR, blockList));
 		addList.add(new Predicate(PredicateName.HOLDING, blockList, type));
 		
 		blockList = new ArrayList<>();

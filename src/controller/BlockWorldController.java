@@ -2,7 +2,6 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -56,7 +55,8 @@ public class BlockWorldController {
 				planner.addPlan(plan);
 			}
 			auxPlans = new ArrayList<Plan>();
-			cyclePlanner();
+			int count = 0;
+			cyclePlanner(count);
 			//at the end of this loop the planner object should have all the possible plans
 			//that where created, including failed ones and valid ones
 			OutputLoader.generateOutput(planner);
@@ -70,7 +70,8 @@ public class BlockWorldController {
 	 * to the planner, the aux list is reset, and the method is called again.
 	 * 
 	 */
-	private void cyclePlanner() {
+	private void cyclePlanner(int count) {
+		boolean finished = false;
 		for(Plan plan : planner.getPlans()) {
 		/*for (currentIterator = planner.getPlans().iterator(); currentIterator.hasNext(); ) {
 			Plan plan = currentIterator.next();*/
@@ -80,13 +81,20 @@ public class BlockWorldController {
 			if(plan.isValidPlan() && plan.isCompletedPlan()) {
 				//We found a completed plan, no need to keep looking (not sure about this, needs to be tested)
 				planner.setCompletedPlan(plan);
+				finished = true;
 				break;
 			}
 		}
-		if(auxPlans.size()>0) {
+		if(auxPlans.size()>0 && !finished) {
 			planner.getPlans().addAll(auxPlans);
 			auxPlans = new ArrayList<>();
-			cyclePlanner();
+			if(count>500) {
+				System.out.println("Too many iterations check initialState and goalState, validate Predicates like Ligth-block"
+						+ " and heavier are set");
+				return;
+			}
+			count++;
+			cyclePlanner(count);
 		}
 	}
 	
@@ -114,6 +122,9 @@ public class BlockWorldController {
 				for(State possibleState : newPossibleStates) {
 					if(firstIt) {
 						//the current plan is the first to change, then we generate new plans that may be possible
+						/*if(possibleState.areEqualStates(initialState)) {
+							plan.setCompletedPlan(true);
+						}*/
 						plan.addState(possibleState);
 						firstIt = false;
 					} else {
@@ -124,6 +135,9 @@ public class BlockWorldController {
 						Plan newPlan = plan.makeCopyPlan();
 						newPlan.addState(possibleState);
 						//planner.addPlan(newPlan);
+						/*if(possibleState.areEqualStates(initialState)) {
+							newPlan.setCompletedPlan(true);
+						}*/
 						auxPlans.add(newPlan);
 					}
 				}
@@ -398,7 +412,7 @@ public class BlockWorldController {
 			for(Operator operatorWithBlocks: operatorsWithBlocks) {
 				State stateFound = new State();
 				//Java 8 magic, finds if any of the predicates in the del list of the operator
-				//matches any of the predicates in the current state (if no this state is invalid)
+				//matches any of the predicates in the current state (if so this state is invalid)
 				/*List<Predicate> found = new ArrayList<>();
 				found = operatorWithBlocks.getDelList().parallelStream()
 						 .filter( operatorDelPredicate-> state.getPredicates()
@@ -419,19 +433,40 @@ public class BlockWorldController {
 				//Checks that the operators add list corresponds to the current state
 				//removes the predicates when found, if not found then state is invalid
 				for(Predicate p : operatorWithBlocks.getAddList() ) {
-					if(predicates.stream().anyMatch(pr -> p.equals(p))) {
+					boolean found = false;
+					for(Predicate pr : predicates) {
+						if(pr.equalPredicate(p)) {
+							predicates.remove(pr);
+							found = true;
+							break;
+						}
+					}
+					if(!found) {
+						stateFound.setValid(false);
+						stateFound.setReasonForInvalidState("For operator: [" + operatorWithBlocks.toString() + "] to be used"
+								+ " State needed to have: " + p);
+					}
+					/*if(predicates.stream().anyMatch(pr -> p.equals(p))) {
 						predicates.remove(p);
 					} else {
 						stateFound.setValid(false);
 						stateFound.setReasonForInvalidState("For operator: [" + operator.toString() + "] to be used"
 								+ " State needed to have: " + p);
-					}
+					}*/
 				}
 				//predicates.remove(predicate);
 				predicates.addAll(operatorWithBlocks.getPreconditions());
 				stateFound.setOperatorUsedToReachState(operatorWithBlocks);
 				stateFound.setPredicates(predicates);
 				stateFound = removeRepeatedPredicates(stateFound);
+				if(operatorWithBlocks.getName().equals(OperatorName.UNSTACK) && 
+						operatorWithBlocks.getParamList().get(0).getName().equals("B")){
+					System.out.println("UP");
+					System.out.println(stateFound.areEqualStates(initialState));
+					System.out.println("UP");
+					System.out.println(stateFound.areEqualStates(initialState));
+					System.out.println(stateFound.areEqualStates(initialState));
+				}
 				statesFound.add(stateFound);
 			}
 			
@@ -466,9 +501,6 @@ public class BlockWorldController {
      * @return
      */
 	private List<Operator> getOperatorsWithBlocks(Operator operator, Predicate predicate) {
-		if(operator.getName().equals(OperatorName.PICK_UP)) {
-			System.out.println("ep");
-		}
 		Predicate addPredicateFromOperator;
 		List<Operator> operatorsWithBlocks = new ArrayList<>();
 		Operator operatorWithBlocks = new Operator();
