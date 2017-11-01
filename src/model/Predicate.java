@@ -78,6 +78,7 @@ public class Predicate {
 	}
 	
 	public boolean equalPredicate(Predicate otherPredicate) {
+		//TODO: return otherPredicate.equal(this)?
 		if(this.name.equals(PredicateName.HOLDING)) {
 			return (otherPredicate.getName().equals(this.name) &&
 					otherPredicate.getVariables().get(0).equals(this.getVariables().get(0))

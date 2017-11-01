@@ -1,0 +1,4 @@
+MaxColumns=3;
+Blocks=A**.B*.C**;
+InitialState=ON-TABLE(A).ON(B,A).CLEAR(B).EMPTY-ARM(L).EMPTY-ARM(R).ON-TABLE(C).CLEAR(C);
+GoalState=ON-TABLE(A).ON-TABLE(C).CLEAR(A).ON(B,C).EMPTY-ARM(L).EMPTY-ARM(R).CLEAR(B);

@@ -54,7 +54,9 @@ public class Plan {
 	}
 	
 	public Plan makeCopyPlan() {
-		return new Plan(this.initialState, new ArrayList(this.states), true, false);
+		List<State> copyStateList =   new ArrayList(this.states);
+		copyStateList.remove(this.states.size()-1);
+		return new Plan(this.initialState, copyStateList, true, false);
 
 	}
 	@Override

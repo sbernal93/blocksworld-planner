@@ -33,6 +33,14 @@ public class Operator {
 	public void setName(OperatorName name) {
 		this.name = name;
 	}
+	
+	public ArmType getArm() {
+		return arm;
+	}
+
+	public void setArm(ArmType arm) {
+		this.arm = arm;
+	}
 
 	public List<Predicate> getPreconditions() {
 		return preconditions;
@@ -94,6 +102,35 @@ public class Operator {
 		}
 		return this.name + "(" + this.paramList.get(0).getName() + ", " + this.paramList.get(1).getName() + ", Arm: " + arm + ")";
 	}
+
+	public boolean areEqualOperators(Operator other) {
+		try {
+			if(other.getName().equals(this.getName()) && other.getArm().equals(this.getArm())) {
+				if(this.getParamList().size() == other.getParamList().size()) {
+					if(this.getParamList().size() == 1) {
+						if(this.getParamList().get(0).getName().equals(other.getParamList().get(0).getName())) {
+							return true;
+						}
+					} else {
+						if(this.getParamList().get(0).getName().equals(other.getParamList().get(0).getName()) &&
+								this.getParamList().get(1).getName().equals(other.getParamList().get(1).getName())) {
+							return true;
+						}
+					}
+				}
+			}
+		} catch(Exception e) {
+			
+		}
+		return false;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return areEqualOperators((Operator) obj);
+	}
+	
+	
 	
 	
 }

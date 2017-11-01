@@ -55,16 +55,19 @@ public class State {
 	public boolean areEqualStates(State otherState) {
 		boolean predicateFound = false;
 		for(Predicate predicate : predicates) {
-			if(!predicate.getName().equals(PredicateName.HEAVIER) || !predicate.getName().equals(PredicateName.LIGHT_BLOCK)){
+			if(!predicate.getName().equals(PredicateName.HEAVIER) && !predicate.getName().equals(PredicateName.LIGHT_BLOCK)) {
 				for(Predicate otherPredicate : otherState.getPredicates()) {
-					if(predicate.equalPredicate(otherPredicate)){
-						predicateFound = true;
+					if(!otherPredicate.getName().equals(PredicateName.HEAVIER) && !otherPredicate.getName().equals(PredicateName.LIGHT_BLOCK)) {
+						if(predicate.equalPredicate(otherPredicate)){
+							predicateFound = true;
+							break;
+						}
 					}
 				}
 				if(!predicateFound) {
 					return false;
 				}
-					predicateFound = false;
+				predicateFound = false;
 			}
 		}
 		return true;

@@ -2,6 +2,7 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -29,6 +30,7 @@ public class BlockWorldController {
 	private List<Operator> operators;
 	private Planner planner;
 	private List<Plan> auxPlans;
+	private List<Plan> failedPlans;
 	
 	@SuppressWarnings("unchecked")
 	public void loadBlockWorld(String filepath){
@@ -38,21 +40,24 @@ public class BlockWorldController {
 		maxColumns = (int) inputMap.get("MaxColumns");
 		initialState = (State) inputMap.get("InitialState");
 		goalState =  (State) inputMap.get("GoalState");
+		failedPlans = new ArrayList<>();
 	}
 	
 	
 	//TODO: test 
 	public void start(){
 		System.out.println("Starting planner");
-		if(isPossibleState(goalState, null)) {
-			System.out.println("Goal state is valid, continuing");
+		if(isPossibleState(goalState, null, true) && isPossibleState(initialState, null, true)) {
+			System.out.println("Goal state is valid, calculating");
 			planner = new Planner();
 			List< State> newPossibleStates = calculateNewStates(goalState);
-			System.out.println(newPossibleStates);
+			newPossibleStates = removeRepeatedOperators(newPossibleStates);
 			for(State posibleState : newPossibleStates) {
-				Plan plan = new Plan(goalState);
-				plan.addState(posibleState);
-				planner.addPlan(plan);
+				if(isPossibleState(posibleState, null, false)) {
+					Plan plan = new Plan(goalState);
+					plan.addState(posibleState);
+					planner.addPlan(plan);
+				}
 			}
 			auxPlans = new ArrayList<Plan>();
 			int count = 0;
@@ -60,6 +65,8 @@ public class BlockWorldController {
 			//at the end of this loop the planner object should have all the possible plans
 			//that where created, including failed ones and valid ones
 			OutputLoader.generateOutput(planner);
+		} else {
+			System.out.println("Goal state or initial state are invalid");
 		}
 	}
 	
@@ -75,9 +82,9 @@ public class BlockWorldController {
 		for(Plan plan : planner.getPlans()) {
 		/*for (currentIterator = planner.getPlans().iterator(); currentIterator.hasNext(); ) {
 			Plan plan = currentIterator.next();*/
-			while(!plan.isCompletedPlan()) {
+			//while(!plan.isCompletedPlan()) {
 				calculatePlan(plan);
-			}
+			//}
 			if(plan.isValidPlan() && plan.isCompletedPlan()) {
 				//We found a completed plan, no need to keep looking (not sure about this, needs to be tested)
 				planner.setCompletedPlan(plan);
@@ -86,16 +93,19 @@ public class BlockWorldController {
 			}
 		}
 		if(auxPlans.size()>0 && !finished) {
-			planner.getPlans().addAll(auxPlans);
+			planner.setPlans(auxPlans.stream().filter(p -> p.isValidPlan() == true).collect(Collectors.toList()));
 			auxPlans = new ArrayList<>();
-			if(count>500) {
+			if(count>60) {
 				System.out.println("Too many iterations check initialState and goalState, validate Predicates like Ligth-block"
 						+ " and heavier are set");
 				return;
 			}
 			count++;
 			cyclePlanner(count);
+			return;
 		}
+		if(auxPlans.size() == 0)
+			return;
 	}
 	
 	/**
@@ -115,31 +125,54 @@ public class BlockWorldController {
 			plan.setCompletedPlan(true);
 			plan.setValidPlan(true);
 		} else {
-			if(isPossibleState(finalStateInList, plan)) {
+			if(isPossibleState(finalStateInList, plan, false)) {
 				//List< State> newPossibleStates = calculateNewStates(goalState);
 				List< State> newPossibleStates = calculateNewStates(finalStateInList);
+				newPossibleStates = removeRepeatedOperators(newPossibleStates);
 				boolean firstIt = true;
 				for(State possibleState : newPossibleStates) {
-					if(firstIt) {
-						//the current plan is the first to change, then we generate new plans that may be possible
-						/*if(possibleState.areEqualStates(initialState)) {
-							plan.setCompletedPlan(true);
-						}*/
-						plan.addState(possibleState);
-						firstIt = false;
+					if(isPossibleState(possibleState, plan, false)) {  
+						if(firstIt) {
+							//the current plan is the first to change, then we generate new plans that may be possible
+							/*if(possibleState.areEqualStates(initialState)) {
+								plan.setCompletedPlan(true);
+							}*/
+							plan.addState(possibleState);
+							firstIt = false;
+							/*if(plan.getStates().size()>6) {
+								System.out.println("epa");
+							}*/
+							if(possibleState.areEqualStates(initialState)) {
+								plan.setCompletedPlan(true);
+								plan.setValidPlan(true);
+							}
+							auxPlans.add(plan);
+						} else {
+							//a new plan is generated exactly as the one we are calculating but
+							//with a new state resulting from a different operator
+							//this new plan is added to the planner to be processed later
+							//this plan may not be possible
+							Plan newPlan = plan.makeCopyPlan();
+							newPlan.addState(possibleState);
+							//planner.addPlan(newPlan);
+							/*if(possibleState.areEqualStates(initialState)) {
+								newPlan.setCompletedPlan(true);
+							}*/
+							if(possibleState.areEqualStates(initialState)) {
+								newPlan.setCompletedPlan(true);
+								newPlan.setValidPlan(true);
+							}
+							auxPlans.add(newPlan);
+						}
 					} else {
-						//a new plan is generated exactly as the one we are calculating but
-						//with a new state resulting from a different operator
-						//this new plan is added to the planner to be processed later
-						//this plan may not be possible
 						Plan newPlan = plan.makeCopyPlan();
 						newPlan.addState(possibleState);
-						//planner.addPlan(newPlan);
-						/*if(possibleState.areEqualStates(initialState)) {
-							newPlan.setCompletedPlan(true);
-						}*/
-						auxPlans.add(newPlan);
+						failedPlans.add(newPlan);
 					}
+				}
+				if(firstIt) {
+					plan.setValidPlan(false);
+					plan.setCompletedPlan(true);
 				}
 			} else {
 				//the plan is invalid since we reached an impossible state
@@ -148,6 +181,40 @@ public class BlockWorldController {
 				plan.setCompletedPlan(true);
 			}
 		}
+		if(!finalStateInList.isValid()) {
+			plan.setValidPlan(false);
+			plan.setCompletedPlan(true);
+		}
+	}
+	
+	private List<State> removeRepeatedOperators(List<State> states) {
+		List<State> newList = new ArrayList<>();
+		
+		for(State s : states) {
+			boolean found = false;
+			for(State s2 : newList) {
+				if(s2.getOperatorUsedToReachState().areEqualOperators(s.getOperatorUsedToReachState())) {
+					found = true;
+				}
+			}
+			if(!found) {
+				newList.add(s);
+			}
+		}
+		return newList;
+	/*	int count = 0;
+		for(State s : states) {
+			if(s.getOperatorUsedToReachState().areEqualOperators(state.getOperatorUsedToReachState())) {
+				count++;
+			}
+			if(count == 2) {
+				return true;
+			}
+		}
+		/*if(states.stream().filter(s -> s.getOperatorUsedToReachState().equals(state.getOperatorUsedToReachState())).count() > 1) {
+			return true;
+		}*/
+		//return false;*/
 	}
 	
 	
@@ -162,9 +229,9 @@ public class BlockWorldController {
 	 * @param state
 	 * @return
 	 */
-	private boolean isPossibleState(State state, Plan plan) {
+	private boolean isPossibleState(State state, Plan plan, boolean onlyPred) {
 		//if plan is null, where only checking the states predicates
-		if(plan == null) {
+		if(onlyPred) {
 			return !hasContradictingPredicates(state);
 		}
 		//some states can already have isValid set to false previously
@@ -197,7 +264,7 @@ public class BlockWorldController {
 							hasContradictions = true;
 							state.setValid(false);
 							state.setReasonForInvalidState("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
-							System.out.println("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
+							//System.out.println("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
 							break;
 						}
 					}
@@ -214,7 +281,7 @@ public class BlockWorldController {
 							hasContradictions = true;
 							state.setValid(false);
 							state.setReasonForInvalidState("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
-							System.out.println("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
+							//System.out.println("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
 							break;
 						}
 					}
@@ -232,7 +299,7 @@ public class BlockWorldController {
 							hasContradictions = true;
 							state.setValid(false);
 							state.setReasonForInvalidState("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
-							System.out.println("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
+							//System.out.println("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
 							break;
 						}
 					}
@@ -242,6 +309,12 @@ public class BlockWorldController {
 			 * HOLDING(x,a) is invalid if: CLEAR(X), ON(X,Y), ON(Y,X), ON_TABLE(X) EMPTY_ARM(A) exists
 			 */
 			case HOLDING:
+				if(predicate.getArm().equals(ArmType.LEFT) && predicate.getVariables().get(0).getWeight()!=1) {
+					hasContradictions = true;
+					state.setValid(false);
+					state.setReasonForInvalidState("Cannot hold block with left arm");
+					break;
+				}
 				for (Predicate p: state.getPredicates()) {
 					if(!p.equalPredicate(predicate)) {
 						if((p.getName().equals(PredicateName.ON) && (
@@ -256,7 +329,7 @@ public class BlockWorldController {
 							hasContradictions = true;
 							state.setValid(false);
 							state.setReasonForInvalidState("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
-							System.out.println("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
+							//System.out.println("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
 							break;
 						}
 					}
@@ -269,6 +342,12 @@ public class BlockWorldController {
 			 * ON(Y,X) exists
 			 */
 			case ON:
+				if(predicate.getVariables().get(0).getWeight()> predicate.getVariables().get(1).getWeight()) {
+					hasContradictions = true;
+					state.setValid(false);
+					state.setReasonForInvalidState("Predicate: [" + predicate + "] impossible because of the weight of the blocks");
+					break;
+				}
 				for (Predicate p: state.getPredicates()) {
 					if(!p.equalPredicate(predicate)) {
 						if((p.getName().equals(PredicateName.ON) && (
@@ -284,14 +363,14 @@ public class BlockWorldController {
 									p.getVariables().get(0).equals(predicate.getVariables().get(0)) || 
 									p.getVariables().get(0).equals(predicate.getVariables().get(1)))) || 
 							(p.getName().equals(PredicateName.CLEAR) && 
-									p.getVariables().get(0).equals(predicate.getVariables().get(1))) ||
+									p.getVariables().get(0).equals(predicate.getVariables().get(1))) /*||
 							(p.getName().equals(PredicateName.HEAVIER) && (
 									p.getVariables().get(0).equals(predicate.getVariables().get(0)) && 
-									p.getVariables().get(1).equals(predicate.getVariables().get(1)))) ) {
+									p.getVariables().get(1).equals(predicate.getVariables().get(1))))*/ ) {
 							hasContradictions = true;
 							state.setValid(false);
 							state.setReasonForInvalidState("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
-							System.out.println("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
+							//System.out.println("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
 							break;
 						}
 					}
@@ -312,7 +391,7 @@ public class BlockWorldController {
 							hasContradictions = true;
 							state.setValid(false);
 							state.setReasonForInvalidState("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
-							System.out.println("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
+							//System.out.println("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
 							break;
 						}
 					}
@@ -348,12 +427,28 @@ public class BlockWorldController {
 	 * @return
 	 */
 	private boolean isEqualToAnyPreviousState(State state, Plan plan) {
-		if(!state.areEqualStates(goalState)) {
-			List<State> states = plan.getStates().stream().filter(s -> s.areEqualStates(state)).collect(Collectors.toList());
-			 if(states.size()>2) {
-				 state.setReasonForInvalidState("State is equal to another previous state");
-				 return true;
-			 }
+		if(!state.areEqualStates(goalState) && !state.areEqualStates(initialState)) {
+			if(planner.getPlans() != null ) {
+				for(Plan p : planner.getPlans()) {
+					if(plan!=null){
+						if(!p.equals(plan)) {
+							List<State> states = p.getStates().stream().filter(s -> s.areEqualStates(state)).collect(Collectors.toList());
+							if(states.size()>1) {
+								 state.setReasonForInvalidState("State is equal to another previous state already found");
+								 state.setValid(false);
+								 return true;
+							 }
+						}
+					} else {
+					List<State> states = p.getStates().stream().filter(s -> s.areEqualStates(state)).collect(Collectors.toList());
+					 if(states.size()>2) {
+						 state.setReasonForInvalidState("State is equal to another previous state already found");
+						 state.setValid(false);
+						 return true;
+					 }
+					}
+				}
+			}
 		}
 		return false;
 	}
@@ -373,7 +468,8 @@ public class BlockWorldController {
 		List< State> stateList = new ArrayList<>();
 		for(Map.Entry<Predicate, List<Operator>> entry : operatorsFoundForPredicate.entrySet()) {
 			for(Operator operator : entry.getValue()) {
-				stateList.addAll(stateFoundAfterOperator(currentState, operator, entry.getKey()));
+				List<State> newStates = stateFoundAfterOperator(currentState, operator, entry.getKey());
+				stateList.addAll(newStates.stream().filter(s -> isPossibleState(s, null, false) && s.isValid()).collect(Collectors.toList()));
 			}
 		}
 		/*for(Operator operator : operatorsFound) {
@@ -406,10 +502,11 @@ public class BlockWorldController {
 	private List<State> stateFoundAfterOperator(State state, Operator operator, Predicate predicate) {
 		List<State> statesFound = new ArrayList<>();
 		//stateFound.setOperatorUsedToReachState(operator);
-		List<Predicate> predicates = state.getPredicates();
+		List<Predicate> predicates = new ArrayList<Predicate>(state.getPredicates());
 		List<Operator> operatorsWithBlocks = getOperatorsWithBlocks(operator, predicate);
 		if(operatorsWithBlocks != null) {
 			for(Operator operatorWithBlocks: operatorsWithBlocks) {
+				 predicates = new ArrayList<Predicate>(state.getPredicates());
 				State stateFound = new State();
 				//Java 8 magic, finds if any of the predicates in the del list of the operator
 				//matches any of the predicates in the current state (if so this state is invalid)
@@ -459,15 +556,9 @@ public class BlockWorldController {
 				stateFound.setOperatorUsedToReachState(operatorWithBlocks);
 				stateFound.setPredicates(predicates);
 				stateFound = removeRepeatedPredicates(stateFound);
-				if(operatorWithBlocks.getName().equals(OperatorName.UNSTACK) && 
-						operatorWithBlocks.getParamList().get(0).getName().equals("B")){
-					System.out.println("UP");
-					System.out.println(stateFound.areEqualStates(initialState));
-					System.out.println("UP");
-					System.out.println(stateFound.areEqualStates(initialState));
-					System.out.println(stateFound.areEqualStates(initialState));
+				if(isPossibleState(stateFound, null, false) && stateFound.isValid()) {
+					statesFound.add(stateFound);
 				}
-				statesFound.add(stateFound);
 			}
 			
 		} else {
@@ -476,7 +567,7 @@ public class BlockWorldController {
 			stateFound.setReasonForInvalidState("Operator: " + operator + " was impossible to apply");
 			stateFound.setOperatorUsedToReachState(operator);
 			stateFound.setPredicates(state.getPredicates());
-			statesFound.add(stateFound);
+			//statesFound.add(stateFound);
 		}
 		return statesFound;
 		
