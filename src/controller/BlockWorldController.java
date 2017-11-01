@@ -93,11 +93,11 @@ public class BlockWorldController {
 		if(auxPlans.size()>0 && !finished) {
 			planner.setPlans(auxPlans.stream().filter(p -> p.isValidPlan() == true).collect(Collectors.toList()));
 			auxPlans = new ArrayList<>();
-			if(count>60) {
+			/*if(count>60) {
 				System.out.println("Too many iterations check initialState and goalState, validate Predicates like Ligth-block"
 						+ " and heavier are set");
 				return;
-			}
+			}*/
 			count++;
 			cyclePlanner(count);
 			return;
