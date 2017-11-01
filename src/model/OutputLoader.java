@@ -47,6 +47,27 @@ public class OutputLoader {
 					lines.add("------------------------------------------------------------");
  				}
 			}
+			if (planner.getFailedPlans()!=null) {
+				for (Plan plan : planner.getFailedPlans()) {
+					State lastState = plan.getStates().get(plan.getStates().size()-1);
+					//added this validation to make sure we dont add the finished plan
+					if(!lastState.isValid()) {
+						StringJoiner predicateJoiner = new StringJoiner(",");
+						StringJoiner operatorJoiner = new StringJoiner(",");
+						for(State state : plan.getStates()) {
+							operatorJoiner.add(state.getOperatorUsedToReachState().toString());
+						}
+						for(Predicate predicate : lastState.getPredicates()) {
+							predicateJoiner.add(predicate.toString());
+						}
+						lines.add("State: ");
+						lines.add("Operators used: " + operatorJoiner.toString()); 
+						lines.add(predicateJoiner.toString());
+						lines.add(lastState.getReasonForInvalidState());
+						lines.add("------------------------------------------------------------");
+	 				}
+				}
+			}
 			String fileName = "par-activity-output" + Calendar.getInstance().getTimeInMillis() + ".txt";
 			Path file = Paths.get(fileName);
 			Files.write(file, lines, Charset.forName("UTF-8"));

@@ -30,7 +30,6 @@ public class BlockWorldController {
 	private List<Operator> operators;
 	private Planner planner;
 	private List<Plan> auxPlans;
-	private List<Plan> failedPlans;
 	
 	@SuppressWarnings("unchecked")
 	public void loadBlockWorld(String filepath){
@@ -40,7 +39,6 @@ public class BlockWorldController {
 		maxColumns = (int) inputMap.get("MaxColumns");
 		initialState = (State) inputMap.get("InitialState");
 		goalState =  (State) inputMap.get("GoalState");
-		failedPlans = new ArrayList<>();
 	}
 	
 	
@@ -167,23 +165,26 @@ public class BlockWorldController {
 					} else {
 						Plan newPlan = plan.makeCopyPlan();
 						newPlan.addState(possibleState);
-						failedPlans.add(newPlan);
+						planner.addFailedPlan(newPlan);
 					}
 				}
 				if(firstIt) {
 					plan.setValidPlan(false);
 					plan.setCompletedPlan(true);
+					planner.addFailedPlan(plan);
 				}
 			} else {
 				//the plan is invalid since we reached an impossible state
 				//the plan is completed because we cannot continue this path
 				plan.setValidPlan(false);
 				plan.setCompletedPlan(true);
+				planner.addFailedPlan(plan);
 			}
 		}
 		if(!finalStateInList.isValid()) {
 			plan.setValidPlan(false);
 			plan.setCompletedPlan(true);
+			planner.addFailedPlan(plan);
 		}
 	}
 	
@@ -235,7 +236,7 @@ public class BlockWorldController {
 			return !hasContradictingPredicates(state);
 		}
 		//some states can already have isValid set to false previously
-		if(state.isValid() && !hasContradictingPredicates(state) && !isEqualToAnyPreviousState(state, plan)) {
+		if(state.isValid() && !isMaxColumnsReached(state) && !hasContradictingPredicates(state) && !isEqualToAnyPreviousState(state, plan)) {
 			return true;
 		}
 		return false;
@@ -388,6 +389,7 @@ public class BlockWorldController {
 								p.getVariables().get(0).equals(predicate.getVariables().get(0))) ||
 						(p.getName().equals(PredicateName.USED_COLS_NUM) && 
 								p.getCol() > maxColumns) ) {
+							
 							hasContradictions = true;
 							state.setValid(false);
 							state.setReasonForInvalidState("Found contradicting predicates: [" + predicate + "] with: [" + p + "]");
@@ -420,6 +422,17 @@ public class BlockWorldController {
 		return hasContradictions;
 	}
 	
+	private boolean isMaxColumnsReached(State state) {
+		int foundColsUsed = (int) state.getPredicates().stream().filter(p -> p.getName().equals(PredicateName.ON_TABLE)).count();
+		
+		if(foundColsUsed > maxColumns) {
+			state.setValid(false);
+			state.setReasonForInvalidState("Max number of columns was passed");
+			return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * Checks if it is equal to any other state in the plan also checking the goalstate
 	 * @param state
@@ -427,7 +440,7 @@ public class BlockWorldController {
 	 * @return
 	 */
 	private boolean isEqualToAnyPreviousState(State state, Plan plan) {
-		if(!state.areEqualStates(goalState) && !state.areEqualStates(initialState)) {
+		/*if(!state.areEqualStates(goalState) && !state.areEqualStates(initialState)) {
 			if(planner.getPlans() != null ) {
 				for(Plan p : planner.getPlans()) {
 					if(plan!=null){
@@ -448,6 +461,16 @@ public class BlockWorldController {
 					 }
 					}
 				}
+			}
+		}*/
+		if(plan!=null){
+			if(!state.areEqualStates(goalState) && !state.areEqualStates(initialState)) {
+				List<State> states = plan.getStates().stream().filter(s -> s.areEqualStates(state)).collect(Collectors.toList());
+				if(states.size()>1) {
+					 state.setReasonForInvalidState("State is equal to another previous state already found");
+					 state.setValid(false);
+					 return true;
+				 }
 			}
 		}
 		return false;
