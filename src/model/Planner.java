@@ -9,6 +9,11 @@ public class Planner {
 	private List<Plan> failedPlans;
 	private Plan completedPlan;
 
+	public Planner(){
+		this.plans = new ArrayList<>();
+		this.failedPlans = new ArrayList<>();
+	}
+	
 	public Plan getCompletedPlan() {
 		return completedPlan;
 	}

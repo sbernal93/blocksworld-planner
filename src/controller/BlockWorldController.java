@@ -48,7 +48,8 @@ public class BlockWorldController {
 		if(isPossibleState(goalState, null, true) && isPossibleState(initialState, null, true)) {
 			System.out.println("Goal state is valid, calculating");
 			planner = new Planner();
-			List< State> newPossibleStates = calculateNewStates(goalState);
+			List<State> failedStates = new ArrayList<>();
+			List< State> newPossibleStates = calculateNewStates(goalState, failedStates);
 			newPossibleStates = removeRepeatedOperators(newPossibleStates);
 			for(State posibleState : newPossibleStates) {
 				if(isPossibleState(posibleState, null, false)) {
@@ -56,6 +57,13 @@ public class BlockWorldController {
 					plan.addState(posibleState);
 					planner.addPlan(plan);
 				}
+			}
+			for(State failedState : failedStates) {
+				Plan plan = new Plan(goalState);
+				plan.addState(failedState);
+				plan.setCompletedPlan(true);
+				plan.setValidPlan(false);
+				planner.addFailedPlan(plan);
 			}
 			auxPlans = new ArrayList<Plan>();
 			int count = 0;
@@ -127,7 +135,8 @@ public class BlockWorldController {
 		} else {
 			if(isPossibleState(finalStateInList, plan, false)) {
 				//List< State> newPossibleStates = calculateNewStates(goalState);
-				List< State> newPossibleStates = calculateNewStates(finalStateInList);
+				List<State> failedStates = new ArrayList<>();
+				List< State> newPossibleStates = calculateNewStates(finalStateInList, failedStates);
 				newPossibleStates = removeRepeatedOperators(newPossibleStates);
 				boolean firstIt = true;
 				for(State possibleState : newPossibleStates) {
@@ -165,6 +174,14 @@ public class BlockWorldController {
 					plan.setValidPlan(false);
 					plan.setCompletedPlan(true);
 					planner.addFailedPlan(plan);
+				}
+				//we add all the failed states that where found
+				for(State failedState : failedStates) {
+					Plan newPlan = plan.makeCopyPlan();
+					newPlan.addState(failedState);
+					newPlan.setValidPlan(false);
+					newPlan.setCompletedPlan(true);
+					planner.addFailedPlan(newPlan);
 				}
 			} else {
 				//the plan is invalid since we reached an impossible state
@@ -401,9 +418,6 @@ public class BlockWorldController {
 				}
 				break;
 			}
-			if(!state.isValid()) {
-				break;
-			}
 		}
 		return hasContradictions;
 	}
@@ -431,10 +445,10 @@ public class BlockWorldController {
 	 * @return
 	 */
 	private boolean isEqualToAnyPreviousState(State state, Plan plan) {
-		/*if(!state.areEqualStates(goalState) && !state.areEqualStates(initialState)) {
+		if(!state.areEqualStates(goalState) && !state.areEqualStates(initialState)) {
 			if(planner.getPlans() != null ) {
 				for(Plan p : planner.getPlans()) {
-					if(plan!=null){
+					if(plan!=null) {
 						if(!p.equals(plan)) {
 							List<State> states = p.getStates().stream().filter(s -> s.areEqualStates(state)).collect(Collectors.toList());
 							if(states.size()>1) {
@@ -453,7 +467,7 @@ public class BlockWorldController {
 					}
 				}
 			}
-		}*/
+		}
 		if(plan!=null){
 			if(!state.areEqualStates(goalState) && !state.areEqualStates(initialState)) {
 				//If the state was already made in the plan
@@ -484,7 +498,7 @@ public class BlockWorldController {
 	 * @param currentState
 	 * @return
 	 */
-	private List< State> calculateNewStates(State currentState) {
+	private List< State> calculateNewStates(State currentState, List<State> failedStates) {
 		List<Operator> operatorsFound = new ArrayList<>();
 		//map for predicate and its operator list
 		Map<Predicate, List<Operator>> operatorsFoundForPredicate = new HashMap<>();
@@ -498,6 +512,7 @@ public class BlockWorldController {
 				List<State> newStates = stateFoundAfterOperator(currentState, operator, entry.getKey());
 				//adds only the new states that are valid
 				stateList.addAll(newStates.stream().filter(s -> isPossibleState(s, null, false) && s.isValid()).collect(Collectors.toList()));
+				failedStates.addAll(newStates.stream().filter(s -> !isPossibleState(s, null, false) ).collect(Collectors.toList()));
 			}
 		}
 		/*for(Operator operator : operatorsFound) {
@@ -564,9 +579,7 @@ public class BlockWorldController {
 				stateFound.setOperatorUsedToReachState(operatorWithBlocks);
 				stateFound.setPredicates(predicates);
 				stateFound = removeRepeatedPredicates(stateFound);
-				if(isPossibleState(stateFound, null, false) && stateFound.isValid()) {
 					statesFound.add(stateFound);
-				}
 			}
 			
 		} else {
@@ -576,7 +589,7 @@ public class BlockWorldController {
 			stateFound.setReasonForInvalidState("Operator: " + operator + " was impossible to apply");
 			stateFound.setOperatorUsedToReachState(operator);
 			stateFound.setPredicates(state.getPredicates());
-			//statesFound.add(stateFound);
+			statesFound.add(stateFound);
 		}
 		return statesFound;
 		
