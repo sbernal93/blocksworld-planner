@@ -1,0 +1,559 @@
+2
+2
+STACK(B, C, Arm: RIGHT),UNSTACK(B, A, Arm: RIGHT)
+------------------------------------------------------------
+State: 
+Operators used: UNSTACK_LEFT(B, A, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [LIGHT_BLOCK([Block [name=B, weight=1]])]
+State is equal to another previous state already found
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(A, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=A, weight=2]], LEFT)]
+Cannot hold block with left arm
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(A, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=A, weight=2]], LEFT)]
+Cannot hold block with left arm
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(B, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [HOLDING([Block [name=B, weight=1]], LEFT)]
+For operator: [LEAVE(B, Arm: LEFT)] to be used State needed to have: Predicate [ON_TABLE([Block [name=B, weight=1]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(B, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [HOLDING([Block [name=B, weight=1]], LEFT)]
+For operator: [LEAVE(B, Arm: LEFT)] to be used State needed to have: Predicate [ON_TABLE([Block [name=B, weight=1]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(C, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=C, weight=2]], LEFT)]
+For operator: [LEAVE(C, Arm: LEFT)] to be used State needed to have: Predicate [CLEAR([Block [name=C, weight=2]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(C, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=C, weight=2]], LEFT)]
+For operator: [LEAVE(C, Arm: LEFT)] to be used State needed to have: Predicate [CLEAR([Block [name=C, weight=2]])]
+------------------------------------------------------------
+State: 
+Operators used: STACK(A, B, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)],Predicate [HEAVIER([Block [name=B, weight=1], Block [name=A, weight=2]])]
+For operator: [STACK(A, B, Arm: RIGHT)] to be used State needed to have: Predicate [ON([Block [name=A, weight=2], Block [name=B, weight=1]])]
+------------------------------------------------------------
+State: 
+Operators used: STACK(A, C, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=A, weight=2]])]
+For operator: [STACK(A, C, Arm: RIGHT)] to be used State needed to have: Predicate [ON([Block [name=A, weight=2], Block [name=C, weight=2]])]
+------------------------------------------------------------
+State: 
+Operators used: UNSTACK(C, A, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [ON([Block [name=C, weight=2], Block [name=A, weight=2]])]
+Found contradicting predicates: [Predicate [ON([Block [name=C, weight=2], Block [name=A, weight=2]])]] with: [Predicate [ON_TABLE([Block [name=C, weight=2]])]]
+------------------------------------------------------------
+State: 
+Operators used: UNSTACK_LEFT(C, A, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [ON([Block [name=C, weight=2], Block [name=A, weight=2]])],Predicate [LIGHT_BLOCK([Block [name=C, weight=2]])]
+Found contradicting predicates: [Predicate [ON([Block [name=C, weight=2], Block [name=A, weight=2]])]] with: [Predicate [ON_TABLE([Block [name=C, weight=2]])]]
+------------------------------------------------------------
+State: 
+Operators used: STACK(X, Y, Arm: GENERIC)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=B, weight=1]])]
+Operator: STACK(X, Y, Arm: GENERIC) was impossible to apply
+------------------------------------------------------------
+State: 
+Operators used: UNSTACK(A, B, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=A, weight=2], Block [name=B, weight=1]])]
+Predicate: [Predicate [ON([Block [name=A, weight=2], Block [name=B, weight=1]])]] impossible because of the weight of the blocks
+------------------------------------------------------------
+State: 
+Operators used: UNSTACK(C, B, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [ON([Block [name=C, weight=2], Block [name=B, weight=1]])]
+Predicate: [Predicate [ON([Block [name=C, weight=2], Block [name=B, weight=1]])]] impossible because of the weight of the blocks
+------------------------------------------------------------
+State: 
+Operators used: UNSTACK_LEFT(A, B, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=A, weight=2], Block [name=B, weight=1]])],Predicate [LIGHT_BLOCK([Block [name=A, weight=2]])]
+Predicate: [Predicate [ON([Block [name=A, weight=2], Block [name=B, weight=1]])]] impossible because of the weight of the blocks
+------------------------------------------------------------
+State: 
+Operators used: UNSTACK_LEFT(C, B, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [ON([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [LIGHT_BLOCK([Block [name=C, weight=2]])]
+Predicate: [Predicate [ON([Block [name=C, weight=2], Block [name=B, weight=1]])]] impossible because of the weight of the blocks
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(B, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)]
+For operator: [LEAVE(B, Arm: RIGHT)] to be used State needed to have: Predicate [ON_TABLE([Block [name=B, weight=1]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(B, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [HOLDING([Block [name=B, weight=1]], LEFT)]
+For operator: [LEAVE(B, Arm: LEFT)] to be used State needed to have: Predicate [ON_TABLE([Block [name=B, weight=1]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(C, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=C, weight=2]], RIGHT)]
+For operator: [LEAVE(C, Arm: RIGHT)] to be used State needed to have: Predicate [CLEAR([Block [name=C, weight=2]])]
+------------------------------------------------------------
+State: 
+Operators used: STACK(A, B, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)],Predicate [HEAVIER([Block [name=B, weight=1], Block [name=A, weight=2]])]
+For operator: [STACK(A, B, Arm: RIGHT)] to be used State needed to have: Predicate [ON([Block [name=A, weight=2], Block [name=B, weight=1]])]
+------------------------------------------------------------
+State: 
+Operators used: STACK(A, C, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=A, weight=2]])]
+For operator: [STACK(A, C, Arm: RIGHT)] to be used State needed to have: Predicate [ON([Block [name=A, weight=2], Block [name=C, weight=2]])]
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, A, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=A, weight=2], Block [name=B, weight=1]])]
+For operator: [STACK(B, A, Arm: RIGHT)] to be used State needed to have: Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])]
+------------------------------------------------------------
+State: 
+Operators used: STACK(C, A, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=C, weight=2]], RIGHT)],Predicate [HEAVIER([Block [name=A, weight=2], Block [name=C, weight=2]])]
+For operator: [STACK(C, A, Arm: RIGHT)] to be used State needed to have: Predicate [ON([Block [name=C, weight=2], Block [name=A, weight=2]])]
+------------------------------------------------------------
+State: 
+Operators used: STACK(C, B, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=C, weight=2]], RIGHT)],Predicate [HEAVIER([Block [name=B, weight=1], Block [name=C, weight=2]])]
+For operator: [STACK(C, B, Arm: RIGHT)] to be used State needed to have: Predicate [ON([Block [name=C, weight=2], Block [name=B, weight=1]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(B, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)]
+For operator: [LEAVE(B, Arm: RIGHT)] to be used State needed to have: Predicate [ON_TABLE([Block [name=B, weight=1]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(B, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)]
+For operator: [LEAVE(B, Arm: RIGHT)] to be used State needed to have: Predicate [ON_TABLE([Block [name=B, weight=1]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(C, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=C, weight=2]], RIGHT)]
+For operator: [LEAVE(C, Arm: RIGHT)] to be used State needed to have: Predicate [CLEAR([Block [name=C, weight=2]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(C, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=C, weight=2]], RIGHT)]
+For operator: [LEAVE(C, Arm: RIGHT)] to be used State needed to have: Predicate [CLEAR([Block [name=C, weight=2]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(A, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=A, weight=2]], LEFT)]
+For operator: [LEAVE(A, Arm: LEFT)] to be used State needed to have: Predicate [CLEAR([Block [name=A, weight=2]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(A, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=A, weight=2]], LEFT)]
+For operator: [LEAVE(A, Arm: LEFT)] to be used State needed to have: Predicate [CLEAR([Block [name=A, weight=2]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(B, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], LEFT)]
+For operator: [LEAVE(B, Arm: LEFT)] to be used State needed to have: Predicate [ON_TABLE([Block [name=B, weight=1]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(B, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], LEFT)]
+For operator: [LEAVE(B, Arm: LEFT)] to be used State needed to have: Predicate [ON_TABLE([Block [name=B, weight=1]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(C, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=C, weight=2]], LEFT)]
+For operator: [LEAVE(C, Arm: LEFT)] to be used State needed to have: Predicate [CLEAR([Block [name=C, weight=2]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(C, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=C, weight=2]], LEFT)]
+For operator: [LEAVE(C, Arm: LEFT)] to be used State needed to have: Predicate [CLEAR([Block [name=C, weight=2]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(A, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)]
+For operator: [LEAVE(A, Arm: RIGHT)] to be used State needed to have: Predicate [CLEAR([Block [name=A, weight=2]])]
+------------------------------------------------------------
+State: 
+Operators used: STACK(X, Y, Arm: GENERIC)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])]
+Operator: STACK(X, Y, Arm: GENERIC) was impossible to apply
+------------------------------------------------------------
+State: 
+Operators used: UNSTACK(A, B, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=A, weight=2], Block [name=B, weight=1]])]
+Predicate: [Predicate [ON([Block [name=A, weight=2], Block [name=B, weight=1]])]] impossible because of the weight of the blocks
+------------------------------------------------------------
+State: 
+Operators used: UNSTACK(C, B, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [ON([Block [name=C, weight=2], Block [name=B, weight=1]])]
+Predicate: [Predicate [ON([Block [name=C, weight=2], Block [name=B, weight=1]])]] impossible because of the weight of the blocks
+------------------------------------------------------------
+State: 
+Operators used: UNSTACK_LEFT(A, B, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=A, weight=2], Block [name=B, weight=1]])],Predicate [LIGHT_BLOCK([Block [name=A, weight=2]])]
+Predicate: [Predicate [ON([Block [name=A, weight=2], Block [name=B, weight=1]])]] impossible because of the weight of the blocks
+------------------------------------------------------------
+State: 
+Operators used: UNSTACK_LEFT(C, B, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [ON([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [LIGHT_BLOCK([Block [name=C, weight=2]])]
+Predicate: [Predicate [ON([Block [name=C, weight=2], Block [name=B, weight=1]])]] impossible because of the weight of the blocks
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(B, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)]
+For operator: [LEAVE(B, Arm: RIGHT)] to be used State needed to have: Predicate [ON_TABLE([Block [name=B, weight=1]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(B, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], LEFT)]
+For operator: [LEAVE(B, Arm: LEFT)] to be used State needed to have: Predicate [ON_TABLE([Block [name=B, weight=1]])]
+------------------------------------------------------------
+State: 
+Operators used: STACK(X, Y, Arm: GENERIC)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])]
+Operator: STACK(X, Y, Arm: GENERIC) was impossible to apply
+------------------------------------------------------------
+State: 
+Operators used: UNSTACK(A, B, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=A, weight=2], Block [name=B, weight=1]])]
+Predicate: [Predicate [ON([Block [name=A, weight=2], Block [name=B, weight=1]])]] impossible because of the weight of the blocks
+------------------------------------------------------------
+State: 
+Operators used: UNSTACK(C, B, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [ON([Block [name=C, weight=2], Block [name=B, weight=1]])]
+Predicate: [Predicate [ON([Block [name=C, weight=2], Block [name=B, weight=1]])]] impossible because of the weight of the blocks
+------------------------------------------------------------
+State: 
+Operators used: UNSTACK_LEFT(A, B, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=A, weight=2], Block [name=B, weight=1]])],Predicate [LIGHT_BLOCK([Block [name=A, weight=2]])]
+Predicate: [Predicate [ON([Block [name=A, weight=2], Block [name=B, weight=1]])]] impossible because of the weight of the blocks
+------------------------------------------------------------
+State: 
+Operators used: UNSTACK_LEFT(C, B, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [ON([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [LIGHT_BLOCK([Block [name=C, weight=2]])]
+Predicate: [Predicate [ON([Block [name=C, weight=2], Block [name=B, weight=1]])]] impossible because of the weight of the blocks
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(B, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)]
+For operator: [LEAVE(B, Arm: RIGHT)] to be used State needed to have: Predicate [ON_TABLE([Block [name=B, weight=1]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(B, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], LEFT)]
+For operator: [LEAVE(B, Arm: LEFT)] to be used State needed to have: Predicate [ON_TABLE([Block [name=B, weight=1]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(C, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=C, weight=2]], RIGHT)]
+For operator: [LEAVE(C, Arm: RIGHT)] to be used State needed to have: Predicate [CLEAR([Block [name=C, weight=2]])]
+------------------------------------------------------------
+State: 
+Operators used: STACK(A, B, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)],Predicate [HEAVIER([Block [name=B, weight=1], Block [name=A, weight=2]])]
+For operator: [STACK(A, B, Arm: RIGHT)] to be used State needed to have: Predicate [ON([Block [name=A, weight=2], Block [name=B, weight=1]])]
+------------------------------------------------------------
+State: 
+Operators used: STACK(A, C, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=A, weight=2]])]
+For operator: [STACK(A, C, Arm: RIGHT)] to be used State needed to have: Predicate [ON([Block [name=A, weight=2], Block [name=C, weight=2]])]
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, A, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=A, weight=2], Block [name=B, weight=1]])]
+Found contradicting predicates: [Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)]] with: [Predicate [CLEAR([Block [name=B, weight=1]])]]
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, C, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=B, weight=1]])]
+Found contradicting predicates: [Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)]] with: [Predicate [CLEAR([Block [name=B, weight=1]])]]
+------------------------------------------------------------
+State: 
+Operators used: STACK(C, A, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=C, weight=2]], RIGHT)],Predicate [HEAVIER([Block [name=A, weight=2], Block [name=C, weight=2]])]
+For operator: [STACK(C, A, Arm: RIGHT)] to be used State needed to have: Predicate [ON([Block [name=C, weight=2], Block [name=A, weight=2]])]
+------------------------------------------------------------
+State: 
+Operators used: STACK(C, B, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=C, weight=2]], RIGHT)],Predicate [HEAVIER([Block [name=B, weight=1], Block [name=C, weight=2]])]
+For operator: [STACK(C, B, Arm: RIGHT)] to be used State needed to have: Predicate [ON([Block [name=C, weight=2], Block [name=B, weight=1]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(A, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)]
+For operator: [LEAVE(A, Arm: RIGHT)] to be used State needed to have: Predicate [CLEAR([Block [name=A, weight=2]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(A, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)]
+For operator: [LEAVE(A, Arm: RIGHT)] to be used State needed to have: Predicate [CLEAR([Block [name=A, weight=2]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(B, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)]
+For operator: [LEAVE(B, Arm: RIGHT)] to be used State needed to have: Predicate [ON_TABLE([Block [name=B, weight=1]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(B, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)]
+For operator: [LEAVE(B, Arm: RIGHT)] to be used State needed to have: Predicate [ON_TABLE([Block [name=B, weight=1]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(C, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=C, weight=2]], RIGHT)]
+For operator: [LEAVE(C, Arm: RIGHT)] to be used State needed to have: Predicate [CLEAR([Block [name=C, weight=2]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(C, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=C, weight=2]], RIGHT)]
+For operator: [LEAVE(C, Arm: RIGHT)] to be used State needed to have: Predicate [CLEAR([Block [name=C, weight=2]])]
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, A, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=A, weight=2], Block [name=B, weight=1]])]
+Found contradicting predicates: [Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)]] with: [Predicate [CLEAR([Block [name=B, weight=1]])]]
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, A, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], LEFT)],Predicate [HEAVIER([Block [name=A, weight=2], Block [name=B, weight=1]])]
+Found contradicting predicates: [Predicate [HOLDING([Block [name=B, weight=1]], LEFT)]] with: [Predicate [CLEAR([Block [name=B, weight=1]])]]
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, C, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=B, weight=1]])]
+Found contradicting predicates: [Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)]] with: [Predicate [CLEAR([Block [name=B, weight=1]])]]
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, C, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], LEFT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=B, weight=1]])]
+Found contradicting predicates: [Predicate [HOLDING([Block [name=B, weight=1]], LEFT)]] with: [Predicate [CLEAR([Block [name=B, weight=1]])]]
+------------------------------------------------------------
+State: 
+Operators used: UNSTACK_LEFT(B, A, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [LIGHT_BLOCK([Block [name=B, weight=1]])]
+State is equal to another previous state already found
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(A, Arm: RIGHT),LEAVE(A, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)],Predicate [HOLDING([Block [name=A, weight=2]], LEFT)]
+For operator: [LEAVE(A, Arm: LEFT)] to be used State needed to have: Predicate [CLEAR([Block [name=A, weight=2]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(A, Arm: RIGHT),LEAVE(A, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)],Predicate [HOLDING([Block [name=A, weight=2]], LEFT)]
+For operator: [LEAVE(A, Arm: LEFT)] to be used State needed to have: Predicate [CLEAR([Block [name=A, weight=2]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(A, Arm: RIGHT),LEAVE(B, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)],Predicate [HOLDING([Block [name=B, weight=1]], LEFT)]
+For operator: [LEAVE(B, Arm: LEFT)] to be used State needed to have: Predicate [ON_TABLE([Block [name=B, weight=1]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(A, Arm: RIGHT),LEAVE(B, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)],Predicate [HOLDING([Block [name=B, weight=1]], LEFT)]
+For operator: [LEAVE(B, Arm: LEFT)] to be used State needed to have: Predicate [ON_TABLE([Block [name=B, weight=1]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(A, Arm: RIGHT),LEAVE(C, Arm: LEFT)
+Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)],Predicate [HOLDING([Block [name=C, weight=2]], LEFT)]
+For operator: [LEAVE(C, Arm: LEFT)] to be used State needed to have: Predicate [CLEAR([Block [name=C, weight=2]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(A, Arm: RIGHT),LEAVE(C, Arm: LEFT)
+Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)],Predicate [HOLDING([Block [name=C, weight=2]], LEFT)]
+For operator: [LEAVE(C, Arm: LEFT)] to be used State needed to have: Predicate [CLEAR([Block [name=C, weight=2]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(A, Arm: RIGHT),STACK(X, Y, Arm: GENERIC)
+Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)]
+Operator: STACK(X, Y, Arm: GENERIC) was impossible to apply
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(A, Arm: RIGHT),UNSTACK(A, B, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=A, weight=2], Block [name=B, weight=1]])]
+Predicate: [Predicate [ON([Block [name=A, weight=2], Block [name=B, weight=1]])]] impossible because of the weight of the blocks
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(A, Arm: RIGHT),UNSTACK(C, B, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [ON([Block [name=C, weight=2], Block [name=B, weight=1]])]
+For operator: [UNSTACK(C, B, Arm: RIGHT)] to be used State needed to have: Predicate [HOLDING([Block [name=C, weight=2]], RIGHT)]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(A, Arm: RIGHT),UNSTACK_LEFT(A, B, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=A, weight=2], Block [name=B, weight=1]])],Predicate [LIGHT_BLOCK([Block [name=A, weight=2]])]
+Predicate: [Predicate [ON([Block [name=A, weight=2], Block [name=B, weight=1]])]] impossible because of the weight of the blocks
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(A, Arm: RIGHT),UNSTACK_LEFT(C, B, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [ON([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [LIGHT_BLOCK([Block [name=C, weight=2]])]
+Predicate: [Predicate [ON([Block [name=C, weight=2], Block [name=B, weight=1]])]] impossible because of the weight of the blocks
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(A, Arm: RIGHT),LEAVE(B, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)]
+For operator: [LEAVE(B, Arm: RIGHT)] to be used State needed to have: Predicate [EMPTY_ARM(RIGHT)]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(A, Arm: RIGHT),LEAVE(B, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)],Predicate [HOLDING([Block [name=B, weight=1]], LEFT)]
+For operator: [LEAVE(B, Arm: LEFT)] to be used State needed to have: Predicate [ON_TABLE([Block [name=B, weight=1]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(A, Arm: RIGHT),LEAVE(C, Arm: RIGHT)
+Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)],Predicate [HOLDING([Block [name=C, weight=2]], RIGHT)]
+For operator: [LEAVE(C, Arm: RIGHT)] to be used State needed to have: Predicate [EMPTY_ARM(RIGHT)]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(A, Arm: RIGHT),UNSTACK(A, B, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=A, weight=2], Block [name=B, weight=1]])]
+Predicate: [Predicate [ON([Block [name=A, weight=2], Block [name=B, weight=1]])]] impossible because of the weight of the blocks
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(A, Arm: RIGHT),UNSTACK(A, C, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=A, weight=2], Block [name=C, weight=2]])]
+For operator: [UNSTACK(A, C, Arm: RIGHT)] to be used State needed to have: Predicate [CLEAR([Block [name=C, weight=2]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(A, Arm: RIGHT),UNSTACK_LEFT(B, A, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [LIGHT_BLOCK([Block [name=B, weight=1]])]
+For operator: [UNSTACK_LEFT(B, A, Arm: LEFT)] to be used State needed to have: Predicate [CLEAR([Block [name=A, weight=2]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(A, Arm: RIGHT),UNSTACK_LEFT(C, A, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [ON([Block [name=C, weight=2], Block [name=A, weight=2]])],Predicate [LIGHT_BLOCK([Block [name=C, weight=2]])]
+For operator: [UNSTACK_LEFT(C, A, Arm: LEFT)] to be used State needed to have: Predicate [CLEAR([Block [name=A, weight=2]])]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(A, Arm: RIGHT),PICKUP_LEFT(A, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [LIGHT_BLOCK([Block [name=A, weight=2]])]
+Found contradicting predicates: [Predicate [ON_TABLE([Block [name=A, weight=2]])]] with: [Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)]]
+------------------------------------------------------------
+State: 
+Operators used: LEAVE(A, Arm: RIGHT),STACK(B, C, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=B, weight=1]])]
+For operator: [STACK(B, C, Arm: RIGHT)] to be used State needed to have: Predicate [EMPTY_ARM(RIGHT)]
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, C, Arm: RIGHT),LEAVE(A, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=A, weight=2]], LEFT)]
+Cannot hold block with left arm
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, C, Arm: RIGHT),LEAVE(A, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=A, weight=2]], LEFT)]
+Cannot hold block with left arm
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, C, Arm: RIGHT),LEAVE(B, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=B, weight=1]], LEFT)]
+For operator: [LEAVE(B, Arm: LEFT)] to be used State needed to have: Predicate [CLEAR([Block [name=B, weight=1]])]
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, C, Arm: RIGHT),LEAVE(B, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=B, weight=1]], LEFT)]
+For operator: [LEAVE(B, Arm: LEFT)] to be used State needed to have: Predicate [CLEAR([Block [name=B, weight=1]])]
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, C, Arm: RIGHT),LEAVE(C, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=C, weight=2]], LEFT)]
+Cannot hold block with left arm
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, C, Arm: RIGHT),LEAVE(C, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=C, weight=2]], LEFT)]
+Cannot hold block with left arm
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, C, Arm: RIGHT),STACK(A, B, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)],Predicate [HEAVIER([Block [name=B, weight=1], Block [name=A, weight=2]])]
+For operator: [STACK(A, B, Arm: RIGHT)] to be used State needed to have: Predicate [EMPTY_ARM(RIGHT)]
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, C, Arm: RIGHT),STACK(A, C, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=A, weight=2]])]
+For operator: [STACK(A, C, Arm: RIGHT)] to be used State needed to have: Predicate [EMPTY_ARM(RIGHT)]
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, C, Arm: RIGHT),UNSTACK(C, A, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [ON([Block [name=C, weight=2], Block [name=A, weight=2]])]
+For operator: [UNSTACK(C, A, Arm: RIGHT)] to be used State needed to have: Predicate [HOLDING([Block [name=C, weight=2]], RIGHT)]
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, C, Arm: RIGHT),UNSTACK_LEFT(B, A, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])],Predicate [LIGHT_BLOCK([Block [name=B, weight=1]])]
+Found contradicting predicates: [Predicate [ON([Block [name=B, weight=1], Block [name=A, weight=2]])]] with: [Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)]]
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, C, Arm: RIGHT),UNSTACK_LEFT(C, A, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [ON([Block [name=C, weight=2], Block [name=A, weight=2]])],Predicate [LIGHT_BLOCK([Block [name=C, weight=2]])]
+Found contradicting predicates: [Predicate [ON([Block [name=C, weight=2], Block [name=A, weight=2]])]] with: [Predicate [ON_TABLE([Block [name=C, weight=2]])]]
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, C, Arm: RIGHT),LEAVE(A, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)]
+For operator: [LEAVE(A, Arm: RIGHT)] to be used State needed to have: Predicate [EMPTY_ARM(RIGHT)]
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, C, Arm: RIGHT),STACK(C, A, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=C, weight=2]], RIGHT)],Predicate [HEAVIER([Block [name=A, weight=2], Block [name=C, weight=2]])]
+For operator: [STACK(C, A, Arm: RIGHT)] to be used State needed to have: Predicate [EMPTY_ARM(RIGHT)]
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, C, Arm: RIGHT),STACK(C, B, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=C, weight=2]], RIGHT)],Predicate [HEAVIER([Block [name=B, weight=1], Block [name=C, weight=2]])]
+For operator: [STACK(C, B, Arm: RIGHT)] to be used State needed to have: Predicate [EMPTY_ARM(RIGHT)]
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, C, Arm: RIGHT),UNSTACK(A, C, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=A, weight=2], Block [name=C, weight=2]])]
+For operator: [UNSTACK(A, C, Arm: RIGHT)] to be used State needed to have: Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)]
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, C, Arm: RIGHT),UNSTACK_LEFT(A, C, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=A, weight=2], Block [name=C, weight=2]])],Predicate [LIGHT_BLOCK([Block [name=A, weight=2]])]
+Found contradicting predicates: [Predicate [ON([Block [name=A, weight=2], Block [name=C, weight=2]])]] with: [Predicate [ON_TABLE([Block [name=A, weight=2]])]]
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, C, Arm: RIGHT),UNSTACK_LEFT(B, C, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])],Predicate [LIGHT_BLOCK([Block [name=B, weight=1]])]
+Found contradicting predicates: [Predicate [ON([Block [name=B, weight=1], Block [name=C, weight=2]])]] with: [Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)]]
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, C, Arm: RIGHT),LEAVE(C, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=C, weight=2]], RIGHT)]
+For operator: [LEAVE(C, Arm: RIGHT)] to be used State needed to have: Predicate [EMPTY_ARM(RIGHT)]
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, C, Arm: RIGHT),LEAVE(A, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=A, weight=2]], RIGHT)]
+For operator: [LEAVE(A, Arm: RIGHT)] to be used State needed to have: Predicate [EMPTY_ARM(RIGHT)]
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, C, Arm: RIGHT),LEAVE(C, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [HOLDING([Block [name=C, weight=2]], RIGHT)]
+For operator: [LEAVE(C, Arm: RIGHT)] to be used State needed to have: Predicate [EMPTY_ARM(RIGHT)]
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, C, Arm: RIGHT),UNSTACK_LEFT(A, B, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [ON([Block [name=A, weight=2], Block [name=B, weight=1]])],Predicate [LIGHT_BLOCK([Block [name=A, weight=2]])]
+For operator: [UNSTACK_LEFT(A, B, Arm: LEFT)] to be used State needed to have: Predicate [CLEAR([Block [name=B, weight=1]])]
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, C, Arm: RIGHT),UNSTACK_LEFT(C, B, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [ON([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [LIGHT_BLOCK([Block [name=C, weight=2]])]
+For operator: [UNSTACK_LEFT(C, B, Arm: LEFT)] to be used State needed to have: Predicate [CLEAR([Block [name=B, weight=1]])]
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, C, Arm: RIGHT),PICK_UP(B, Arm: RIGHT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [EMPTY_ARM(RIGHT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON_TABLE([Block [name=B, weight=1]])]
+Max number of columns was passed
+------------------------------------------------------------
+State: 
+Operators used: STACK(B, C, Arm: RIGHT),PICKUP_LEFT(B, Arm: LEFT)
+Predicate [ON_TABLE([Block [name=A, weight=2]])],Predicate [ON_TABLE([Block [name=C, weight=2]])],Predicate [CLEAR([Block [name=A, weight=2]])],Predicate [CLEAR([Block [name=C, weight=2]])],Predicate [HOLDING([Block [name=B, weight=1]], RIGHT)],Predicate [HEAVIER([Block [name=C, weight=2], Block [name=B, weight=1]])],Predicate [EMPTY_ARM(LEFT)],Predicate [CLEAR([Block [name=B, weight=1]])],Predicate [ON_TABLE([Block [name=B, weight=1]])],Predicate [LIGHT_BLOCK([Block [name=B, weight=1]])]
+Max number of columns was passed
+------------------------------------------------------------

@@ -445,7 +445,7 @@ public class BlockWorldController {
 	 * @return
 	 */
 	private boolean isEqualToAnyPreviousState(State state, Plan plan) {
-		if(!state.areEqualStates(goalState) && !state.areEqualStates(initialState)) {
+		/*if(!state.areEqualStates(goalState) && !state.areEqualStates(initialState)) {
 			if(planner.getPlans() != null ) {
 				for(Plan p : planner.getPlans()) {
 					if(plan!=null) {
@@ -467,7 +467,7 @@ public class BlockWorldController {
 					}
 				}
 			}
-		}
+		}*/
 		if(plan!=null){
 			if(!state.areEqualStates(goalState) && !state.areEqualStates(initialState)) {
 				//If the state was already made in the plan

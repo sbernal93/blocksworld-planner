@@ -4,6 +4,9 @@ import controller.BlockWorldController;
 
 import java.util.Scanner;
 
+/**
+*@author Santiago Bernal Mateusz Skibinski
+*/
 public class Main {
 
     public static void main(String[] args) {
@@ -11,8 +14,8 @@ public class Main {
         try {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Please enter the file path to be read: ");
-            String filePath = scanner.nextLine();
-            //String filePath = "resources/testing2.txt";
+            //String filePath = scanner.nextLine();
+            String filePath = "resources/testing6.txt";
             System.out.println("Filepath is: " + filePath);
             BlockWorldController controller = new BlockWorldController();
             controller.loadBlockWorld(filePath);
